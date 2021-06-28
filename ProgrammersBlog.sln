@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{1B3F15F6-FF62-4610-9D5B-381A22CD0722}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProgrammersBlog", "ProgremmesBlog.Mvc\ProgrammersBlog.csproj", "{82D0C091-F2E8-4855-8B32-12976E750304}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProgrammersBlog.Mvc", "ProgremmesBlog.Mvc\ProgrammersBlog.Mvc.csproj", "{82D0C091-F2E8-4855-8B32-12976E750304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

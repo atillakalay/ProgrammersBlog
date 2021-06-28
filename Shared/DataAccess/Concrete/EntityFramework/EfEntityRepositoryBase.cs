@@ -58,7 +58,7 @@ namespace Core.DataAccess.Concrete.EntityFramework
 
         public async Task AddAsync(TEntity entity)
         {
-            _context.Set<TEntity>().AddAsync(entity);
+          await  _context.Set<TEntity>().AddAsync(entity);
         }
 
         public async Task UpdateAsync(TEntity entity)
