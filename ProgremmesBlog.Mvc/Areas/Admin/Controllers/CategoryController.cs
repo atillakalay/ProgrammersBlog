@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Business.Abstract;
+using Core.Utilities.Extensions;
 using Core.Utilities.Results.ComplexTypes;
+using Entities.Dtos;
+using ProgrammersBlog.Mvc.Areas.Admin.Models;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {
@@ -23,10 +24,32 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             var result = await _categoryService.GetAll();
             return View(result.Data);
         }
-
+        [HttpGet]
         public IActionResult Add()
         {
             return PartialView("_CategoryAddPartial");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(CategoryAddDto categoryAddDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _categoryService.Add(categoryAddDto, "Atilla Kalay");
+                if (result.ResultStatus == ResultStatus.Success)
+                {
+                    var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
+                    {
+                        CategoryDto = result.Data,
+                        CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto)
+                    });
+                    return Json(categoryAddAjaxModel);
+                }
+            }
+            var categoryAddAjaxErrorModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
+            {
+                CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto)
+            });
+            return Json(categoryAddAjaxErrorModel);
         }
     }
 }
