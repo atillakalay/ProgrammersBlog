@@ -168,12 +168,12 @@
                                                     <td>${categoryAddAjaxModel.CategoryDto.Category.Id}</td>
                                                     <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
                                                     <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
-                                                    <td>${categoryAddAjaxModel.CategoryDto.Category.IsActive}</td>
-                                                    <td>${categoryAddAjaxModel.CategoryDto.Category.IsDeleted}</td>
+                                                    <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
+                                                    <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
                                                     <td>${categoryAddAjaxModel.CategoryDto.Category.Note}</td>
-                                                    <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedDate}</td>
+                                                    <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.CreatedDate)}</td>
                                                     <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedByName}</td>
-                                                    <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedDate}</td>
+                                                    <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
                                                     <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedByName}</td>
                                                 </tr>`;
                                 const newTableRowObject = $(newTableRow);
@@ -181,6 +181,13 @@
                                 $('#categoriesTable').append(newTableRowObject);
                                 newTableRowObject.fadeIn(3500);
                                 toastr.success(`${categoryAddAjaxModel.CategoryDto.Message}`, 'Başarılı İşlem!');
+                            } else {
+                                let summaryText = "";
+                                $('#validation-summary > ul > li').each(function() {
+                                    let text = $(this).text();
+                                    summaryText = `${text}\n`;
+                                });
+                                toastr.warning(summaryText);
                             }
                         });
                     });
