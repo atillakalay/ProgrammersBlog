@@ -13,6 +13,9 @@
             Kategoriler
         </div>
         <div class="card-body">
+            <div class="spinner-border" role="status" style="display: none;">
+                <span class="sr-only">Yükleniyor...</span>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered" id="categoriesTable" width="100%" cellspacing="0">
                     <thead>
@@ -98,7 +101,47 @@
                         text: 'Yenile',
                         className: 'btn btn-warning',
                         action: function(e, dt, node, config) {
-                            alert('Yenile butonuna basıldı.');
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("GetAllCategories", "Category")',
+                                contentType: "application/Json",
+                                beforeSend: function() {
+                                    $('#categoriesTable').hide();
+                                    $('.spinner-border').show();
+                                },
+                                success: function(data) {
+                                    const categoryListDto = jQuery.parseJSON(data);
+                                    console.log(categoryListDto);
+                                    if (categoryListDto.ResultStatus === 0) {
+                                        let tableBody = "";
+                                        $.each(categoryListDto.Categories.$values,
+                                            function(index, category) {
+                                                tableBody += `
+                                            <tr>
+                                                <td>${category.Id}</td>
+                                                <td>${category.Name}</td>
+                                                <td>${category.Description}</td>
+                                                <td>${convertFirstLetterToUpperCase(category.IsActive.toString())}</td>
+                                                <td>${convertFirstLetterToUpperCase(category.IsDeleted.toString())}</td>
+                                                <td>${category.Note}</td>
+                                                <td>${convertToShortDate(category.CreatedDate)}</td>
+                                                <td>${category.CreatedByName}</td>
+                                                <td>${convertToShortDate(category.ModifiedDate)}</td>
+                                                <td>${category.ModifiedByName}</td>
+                                                </tr>`
+                                            });
+                                        $('#categoriesTable>tbody').replaceWith(tableBody);
+                                        $('.spinner-border').hide();
+                                        $('#categoriesTable').fadeIn(1400);
+                                    } else {
+                                        toastr.error(`${categoryListDto.Message}`, 'İşlem Başarısız!');
+                                    }
+                                },
+                                error: function(err) {
+                                    console.log(err);
+                                    toastr.error(`${err.statusText}`, 'İşlem Başarısız!');
+                                }
+                            });
                         }
                     }
                 ],
