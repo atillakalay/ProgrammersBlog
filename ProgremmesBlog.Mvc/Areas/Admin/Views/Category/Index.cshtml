@@ -30,6 +30,7 @@
                             <th>Oluşturan Kullanıcı Adı</th>
                             <th>Son Düzenlenme Tarihi</th>
                             <th>Son Düzenleyen Kullanıcı Adı</th>
+                            <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -44,13 +45,14 @@
                             <th>Oluşturan Kullanıcı Adı</th>
                             <th>Son Düzenlenme Tarihi</th>
                             <th>Son Düzenleyen Kullanıcı Adı</th>
+                            <th>İşlemler</th>
                         </tr>
                     </tfoot>
                     <tbody>
 
                         @foreach (var category in Model.Categories)
                         {
-                            <tr>
+                            <tr name="@category.Id">
                                 <td>@category.Id</td>
                                 <td>@category.Name</td>
                                 <td>@category.Description</td>
@@ -61,6 +63,10 @@
                                 <td>@category.CreatedByName</td>
                                 <td>@category.ModifiedDate.ToShortDateString()</td>
                                 <td>@category.ModifiedByName</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm"><span class="fas fa-edit"></span> Düzenle</button>
+                                    <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span> Sil</button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -235,6 +241,52 @@
                         });
                     });
             });
+             @* Ajax POST / Posting the FormData as CategoryAddDto ends here. *@
+            @* Ajax POST / Deleting a Category starts from here *@
+            $(document).on('click',
+                '.btn-delete',
+                function(event) {
+                    event.preventDefault();
+                    const id = $(this).attr('data-id');
+                    Swal.fire({
+                        title: 'Silmek istediğinize emin misiniz?',
+                        text: "Seçili kategori silinicektir!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Evet, silmek istiyorum.',
+                        cancelButtonText: 'Hayır, silmek istemiyorum.'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { categoryId: id },
+                                url: '@Url.Action("Delete", "Category")',
+                                success: function(data) {
+                                    const result = jQuery.parseJSON(data);
+                                    if (result.ResultStatus === 0) {
+                                        Swal.fire(
+                                            'Silindi!',
+                                            'Seçili kategori başarıyla silinmiştir.',
+                                            'success'
+                                        );
+                                        const tableRow = $(`[name="${id}"]`);
+                                        tableRow.fadeOut(3500);
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Bir hata oluştu!',
+                                            text: `${result.Message}`,
+                                        });
+                                    }
+                                },
+                                error: function(err) { console.log(err); }
+                            })
+                        }
+                    })
+                });
         });
     </script>
 }
