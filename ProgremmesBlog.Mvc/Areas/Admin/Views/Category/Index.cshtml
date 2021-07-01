@@ -22,9 +22,9 @@
                         <tr>
                             <th>#</th>
                             <th>Adı</th>
-                            <th>Açıkalaması</th>
-                            <th>Aktif mi?</th>
-                            <th>Silinmiş mi?</th>
+                            <th>Açıklaması</th>
+                            <th>Aktif Mi?</th>
+                            <th>Silinmiş Mi?</th>
                             <th>Not</th>
                             <th>Oluşturulma Tarihi</th>
                             <th>Oluşturan Kullanıcı Adı</th>
@@ -37,9 +37,9 @@
                         <tr>
                             <th>#</th>
                             <th>Adı</th>
-                            <th>Açıkalaması</th>
-                            <th>Aktif mi?</th>
-                            <th>Silinmiş mi?</th>
+                            <th>Açıklaması</th>
+                            <th>Aktif Mi?</th>
+                            <th>Silinmiş Mi?</th>
                             <th>Not</th>
                             <th>Oluşturulma Tarihi</th>
                             <th>Oluşturan Kullanıcı Adı</th>
@@ -49,7 +49,6 @@
                         </tr>
                     </tfoot>
                     <tbody>
-
                         @foreach (var category in Model.Categories)
                         {
                             <tr name="@category.Id">
@@ -100,7 +99,6 @@
                         },
                         className: 'btn btn-success',
                         action: function(e, dt, node, config) {
-
                         }
                     },
                     {
@@ -110,7 +108,7 @@
                             $.ajax({
                                 type: 'GET',
                                 url: '@Url.Action("GetAllCategories", "Category")',
-                                contentType: "application/Json",
+                                contentType: "application/json",
                                 beforeSend: function() {
                                     $('#categoriesTable').hide();
                                     $('.spinner-border').show();
@@ -123,20 +121,24 @@
                                         $.each(categoryListDto.Categories.$values,
                                             function(index, category) {
                                                 tableBody += `
-                                            <tr>
-                                                <td>${category.Id}</td>
-                                                <td>${category.Name}</td>
-                                                <td>${category.Description}</td>
-                                                <td>${convertFirstLetterToUpperCase(category.IsActive.toString())}</td>
-                                                <td>${convertFirstLetterToUpperCase(category.IsDeleted.toString())}</td>
-                                                <td>${category.Note}</td>
-                                                <td>${convertToShortDate(category.CreatedDate)}</td>
-                                                <td>${category.CreatedByName}</td>
-                                                <td>${convertToShortDate(category.ModifiedDate)}</td>
-                                                <td>${category.ModifiedByName}</td>
-                                                </tr>`
+                                                <tr>
+                                    <td>${category.Id}</td>
+                                    <td>${category.Name}</td>
+                                    <td>${category.Description}</td>
+                                    <td>${convertFirstLetterToUpperCase(category.IsActive.toString())}</td>
+                                    <td>${convertFirstLetterToUpperCase(category.IsDeleted.toString())}</td>
+                                    <td>${category.Note}</td>
+                                    <td>${convertToShortDate(category.CreatedDate)}</td>
+                                    <td>${category.CreatedByName}</td>
+                                    <td>${convertToShortDate(category.ModifiedDate)}</td>
+                                    <td>${category.ModifiedByName}</td>
+                                    <td>
+                                <button class="btn btn-primary btn-sm"><span class="fas fa-edit"></span> Düzenle</button>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="${category.Id}"><span class="fas fa-minus-circle"></span> Sil</button>
+                                    </td>
+                                            </tr>`;
                                             });
-                                        $('#categoriesTable>tbody').replaceWith(tableBody);
+                                        $('#categoriesTable > tbody').replaceWith(tableBody);
                                         $('.spinner-border').hide();
                                         $('#categoriesTable').fadeIn(1400);
                                     } else {
@@ -145,7 +147,9 @@
                                 },
                                 error: function(err) {
                                     console.log(err);
-                                    toastr.error(`${err.statusText}`, 'İşlem Başarısız!');
+                                    $('.spinner-border').hide();
+                                    $('#categoriesTable').fadeIn(1000);
+                                    toastr.error(`${err.responseText}`, 'Hata!');
                                 }
                             });
                         }
@@ -234,23 +238,25 @@
                                 let summaryText = "";
                                 $('#validation-summary > ul > li').each(function() {
                                     let text = $(this).text();
-                                    summaryText = `${text}\n`;
+                                    summaryText = `*${text}\n`;
                                 });
                                 toastr.warning(summaryText);
                             }
                         });
                     });
             });
-             @* Ajax POST / Posting the FormData as CategoryAddDto ends here. *@
+            @* Ajax POST / Posting the FormData as CategoryAddDto ends here. *@
             @* Ajax POST / Deleting a Category starts from here *@
             $(document).on('click',
                 '.btn-delete',
                 function(event) {
                     event.preventDefault();
                     const id = $(this).attr('data-id');
+                    const tableRow = $(`[name="${id}"]`);
+                    const categoryName = tableRow.find('td:eq(1)').text();
                     Swal.fire({
                         title: 'Silmek istediğinize emin misiniz?',
-                        text: "Seçili kategori silinicektir!",
+                        text: `${categoryName} adlı kategori silinicektir!`,
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -265,27 +271,30 @@
                                 data: { categoryId: id },
                                 url: '@Url.Action("Delete", "Category")',
                                 success: function(data) {
-                                    const result = jQuery.parseJSON(data);
-                                    if (result.ResultStatus === 0) {
+                                    const categoryDto = jQuery.parseJSON(data);
+                                    if (categoryDto.ResultStatus === 0) {
                                         Swal.fire(
                                             'Silindi!',
-                                            'Seçili kategori başarıyla silinmiştir.',
+                                            `${categoryDto.Category.Name} adlı kategori başarıyla silinmiştir.`,
                                             'success'
                                         );
-                                        const tableRow = $(`[name="${id}"]`);
+
                                         tableRow.fadeOut(3500);
                                     } else {
                                         Swal.fire({
                                             icon: 'error',
-                                            title: 'Bir hata oluştu!',
-                                            text: `${result.Message}`,udemy
+                                            title: 'Başarısız İşlem!',
+                                            text: `${result.Message}`,
                                         });
                                     }
                                 },
-                                error: function(err) { console.log(err); }
-                            })
+                                error: function(err) {
+                                    console.log(err);
+                                    toastr.error(`${err.responseText}`, "Hata!")
+                                }
+                            });
                         }
-                    })
+                    });
                 });
         });
     </script>
