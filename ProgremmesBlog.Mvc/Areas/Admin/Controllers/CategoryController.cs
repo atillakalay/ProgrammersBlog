@@ -58,7 +58,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             var result = await _categoryService.GetCategoryUpdateDto(categoryId);
             if (result.ResultStatus == ResultStatus.Success)
             {
-                return PartialView("_CategoryUpdatePartial");
+                return PartialView("_CategoryUpdatePartial", result.Data);
             }
             else
             {
@@ -66,9 +66,27 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Update()
+        public async Task<IActionResult> Update(CategoryUpdateDto categoryUpdateDto)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var result = await _categoryService.Update(categoryUpdateDto, "Alper Tunga");
+                if (result.ResultStatus == ResultStatus.Success)
+                {
+                    var categoryUpdateAjaxModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+                    {
+                        CategoryDto = result.Data,
+                        CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto)
+                    });
+                    return Json(categoryUpdateAjaxModel);
+                }
+            }
+            var categoryUpdateAjaxErrorModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+            {
+                CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto)
+            });
+            return Json(categoryUpdateAjaxErrorModel);
+
         }
 
         public async Task<JsonResult> GetAllCategories()

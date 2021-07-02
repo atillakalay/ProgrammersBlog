@@ -34,16 +34,12 @@ namespace Business.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            else
+            return new DataResult<CategoryDto>(ResultStatus.Error, "Böyle bir kategori bulunamadı.", new CategoryDto
             {
-                return new DataResult<CategoryDto>(ResultStatus.Error, "Böyle bir kategori bulunamadı", new CategoryDto
-                {
-                    Category = null,
-                    ResultStatus = ResultStatus.Error,
-                    Message = "Böyle bir kategori bulunamadı"
-
-                });
-            }
+                Category = null,
+                ResultStatus = ResultStatus.Error,
+                Message = "Böyle bir kategori bulunamadı."
+            });
         }
 
         public async Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDto(int categoryId)
@@ -57,7 +53,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new DataResult<CategoryUpdateDto>(ResultStatus.Error,"Böyle bir kategori bulunamadı." ,null);
+                return new DataResult<CategoryUpdateDto>(ResultStatus.Error, "Böyle bir kategori bulunamadı.", null);
             }
         }
 
@@ -130,21 +126,20 @@ namespace Business.Concrete
 
             });
         }
-
         public async Task<IDataResult<CategoryDto>> Update(CategoryUpdateDto categoryUpdateDto, string modifiedByName)
         {
-            var category = _mapper.Map<Category>(categoryUpdateDto);
+            var oldCategory = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryUpdateDto.Id);
+            var category = _mapper.Map<CategoryUpdateDto, Category>(categoryUpdateDto, oldCategory);
             category.ModifiedByName = modifiedByName;
             var updatedCategory = await _unitOfWork.Categories.UpdateAsync(category);
             await _unitOfWork.SaveAsync();
-            return new DataResult<CategoryDto>(ResultStatus.Success, $"{categoryUpdateDto.Name} adli kategori başarıyla güncellenmiştir.", new CategoryDto
+            return new DataResult<CategoryDto>(ResultStatus.Success, $"{categoryUpdateDto.Name} adlı kategori başarıyla güncellenmiştir.", new CategoryDto
             {
                 Category = updatedCategory,
                 ResultStatus = ResultStatus.Success,
-                Message = $"{categoryUpdateDto.Name} adli kategori başarıyla güncellenmiştir."
+                Message = $"{categoryUpdateDto.Name} adlı kategori başarıyla güncellenmiştir."
             });
         }
-
         public async Task<IDataResult<CategoryDto>> Delete(int categoryId, string modifiedByName)
         {
             var category = await _unitOfWork.Categories.GetAsync(c => c.Id == categoryId);

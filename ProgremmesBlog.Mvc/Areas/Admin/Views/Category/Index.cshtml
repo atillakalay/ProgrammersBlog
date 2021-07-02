@@ -20,7 +20,7 @@
                 <table class="table table-bordered" id="categoriesTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>ID</th>
                             <th>Adı</th>
                             <th>Açıklaması</th>
                             <th>Aktif Mi?</th>
@@ -35,7 +35,7 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>#</th>
+                            <th>ID</th>
                             <th>Adı</th>
                             <th>Açıklaması</th>
                             <th>Aktif Mi?</th>
@@ -63,7 +63,7 @@
                                 <td>@category.ModifiedDate.ToShortDateString()</td>
                                 <td>@category.ModifiedByName</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm"><span class="fas fa-edit"></span></button>
+                                    <button class="btn btn-primary btn-sm btn-update" data-id="@category.Id"><span class="fas fa-edit"></span></button>
                                     <button class="btn btn-danger btn-sm btn-delete" data-id="@category.Id"><span class="fas fa-minus-circle"></span></button>
                                 </td>
                             </tr>

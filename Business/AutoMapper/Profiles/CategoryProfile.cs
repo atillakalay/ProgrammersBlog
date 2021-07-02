@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using AutoMapper;
 using Entities.Concrete;
 using Entities.Dtos;
