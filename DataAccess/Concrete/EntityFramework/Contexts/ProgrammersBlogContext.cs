@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Concrete.EntityFramework.Contexts
 {
-    public class ProgrammersBlogContext : IdentityDbContext<User, Role, int>
+    public class ProgrammersBlogContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,6 +19,11 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
             modelBuilder.ApplyConfiguration(new CommentMapping());
             modelBuilder.ApplyConfiguration(new RoleMapping());
             modelBuilder.ApplyConfiguration(new UserMapping());
+            modelBuilder.ApplyConfiguration(new RoleClaimMapping());
+            modelBuilder.ApplyConfiguration(new UserClaimMapping());
+            modelBuilder.ApplyConfiguration(new UserLoginMapping());
+            modelBuilder.ApplyConfiguration(new UserRoleMapping());
+            modelBuilder.ApplyConfiguration(new UserTokenMapping());
         }
 
         public DbSet<Article> Articles { get; set; }
