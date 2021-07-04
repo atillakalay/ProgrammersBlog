@@ -34,7 +34,7 @@ namespace Entities.Dtos
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
-        [DisplayName("E-mail")]
+        [DisplayName("Resim")]
         [Required(ErrorMessage = "Lütfen, bir {0} seçiniz.")]
         [DataType(DataType.Upload)]
         public IFormFile Picture { get; set; }

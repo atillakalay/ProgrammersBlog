@@ -24,8 +24,13 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return View(new UserListDto
             {
                 Users = users,
-                ResultStatus=ResultStatus.Success
+                ResultStatus = ResultStatus.Success
             });
+        }
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return PartialView("_UserAddPartial");
         }
     }
 }
