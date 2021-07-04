@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Core.Utilities.Extensions;
 using Core.Utilities.Results.ComplexTypes;
 using Entities.Concrete;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +16,13 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly IWebHostEnvironment _env;
 
-        public UserController(UserManager<User> userManager)
+
+        public UserController(UserManager<User> userManager, IWebHostEnvironment env)
         {
             _userManager = userManager;
+            _env = env;
         }
 
         public async Task<IActionResult> Index()
@@ -31,6 +38,22 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
         public IActionResult Add()
         {
             return PartialView("_UserAddPartial");
+        }
+
+        public async Task<string> ImageUpload(UserAddDto userAddDto)
+        {
+            string wwwroot = _env.WebRootPath;
+            //string fileName = Path.GetFileNameWithoutExtension(userAddDto.Picture.FileName);
+            string fileNameExtension = Path.GetExtension(userAddDto.Picture.FileName);
+            DateTime dateTime = DateTime.Now;
+            string fileName = $"{userAddDto.UserName}_{dateTime.FullDateAndTimeStringWithUnderScore()}";
+            var path = Path.Combine($"{wwwroot}/img", fileName);
+            await using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await userAddDto.Picture.CopyToAsync(stream);
+            }
+
+            return fileName;
         }
     }
 }
