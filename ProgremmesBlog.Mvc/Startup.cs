@@ -3,6 +3,7 @@ using Business.AutoMapper.Profiles;
 using Business.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,11 +23,26 @@ namespace ProgrammersBlog.Mvc
             services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                opt.JsonSerializerOptions.ReferenceHandler=ReferenceHandler.Preserve;
+                opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
             });
             services.AddSession();
             services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile));
             services.LoadMyServices();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/Admin/User/Login");
+                options.LogoutPath = new PathString("/Admin/User/Logout");
+                options.Cookie = new CookieBuilder
+                {
+                    Name = "ProgrammersBlog",
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest, //Always
+                };
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = System.TimeSpan.FromDays(7);
+                options.AccessDeniedPath = "/Admin/User/AccessDenied";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +65,7 @@ namespace ProgrammersBlog.Mvc
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-           
+
 
             app.UseEndpoints(endpoints =>
             {
