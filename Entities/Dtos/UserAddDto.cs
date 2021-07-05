@@ -37,6 +37,7 @@ namespace Entities.Dtos
         [DisplayName("Resim")]
         [Required(ErrorMessage = "Lütfen, bir {0} seçiniz.")]
         [DataType(DataType.Upload)]
-        public IFormFile Picture { get; set; }
+        public IFormFile PictureFile { get; set; }
+        public string Picture { get; set; }
     }
 }
