@@ -80,6 +80,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                     });
                     return Json(userAddAjaxErrorModel);
                 }
+
             }
             var userAddAjaxModelStateErrorModel = JsonSerializer.Serialize(new UserAddAjaxViewModel
             {
@@ -87,6 +88,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 UserAddPartial = await this.RenderViewToStringAsync("_UserAddPartial", userAddDto)
             });
             return Json(userAddAjaxModelStateErrorModel);
+
         }
 
         public async Task<string> ImageUpload(UserAddDto userAddDto)

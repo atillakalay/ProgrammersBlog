@@ -4,9 +4,9 @@ using Entities.Dtos;
 
 namespace ProgrammersBlog.Mvc.AutoMapper.Profiles
 {
-    public class UserProfiles:Profile
+    public class UserProfile:Profile
     {
-        public UserProfiles()
+        public UserProfile()
         {
             CreateMap<UserAddDto, User>();
         }
