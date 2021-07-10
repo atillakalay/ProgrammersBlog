@@ -36,17 +36,19 @@
                             if (userListDto.ResultStatus === 0) {
                                 $.each(userListDto.Users.$values,
                                     function (index, user) {
-                                        dataTable.row.add([
+                                        const newTableRow = dataTable.row.add([
                                             user.Id,
                                             user.UserName,
                                             user.Email,
                                             user.PhoneNumber,
-                                            `<img src="/img/${user.Picture}" alt="${user.UserName}" style="max-height: 50px; max-width: 50px;" />`,
+                                            `<img src="/img/${user.Picture}" alt="${user.UserName}" class="my-image-table" />`,
                                             `
                                 <button class="btn btn-primary btn-sm btn-update" data-id="${user.Id}"><span class="fas fa-edit"></span></button>
                                 <button class="btn btn-danger btn-sm btn-delete" data-id="${user.Id}"><span class="fas fa-minus-circle"></span></button>
                                             `
-                                        ]);
+                                        ]).node();
+                                        const jqueryTableRow = $(newTableRow);
+                                        jqueryTableRow.attr('name', `${user.Id}`);
                                     });
                                 dataTable.draw();
                                 $('.spinner-border').hide();
@@ -138,17 +140,20 @@
                         const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
                         if (isValid) {
                             placeHolderDiv.find('.modal').modal('hide');
-                            dataTable.row.add([
+                            const newTableRow = dataTable.row.add([
                                 userAddAjaxModel.UserDto.User.Id,
                                 userAddAjaxModel.UserDto.User.UserName,
                                 userAddAjaxModel.UserDto.User.Email,
                                 userAddAjaxModel.UserDto.User.PhoneNumber,
-                                `<img src="/img/${userAddAjaxModel.UserDto.User.Picture}" alt="${userAddAjaxModel.UserDto.User.UserName}" style="max-height: 50px; max-width: 50px;" />`,
+                                `<img src="/img/${userAddAjaxModel.UserDto.User.Picture}" alt="${userAddAjaxModel.UserDto.User.UserName}" class="my-image-table" />`,
                                 `
                                 <button class="btn btn-primary btn-sm btn-update" data-id="${userAddAjaxModel.UserDto.User.Id}"><span class="fas fa-edit"></span></button>
                                 <button class="btn btn-danger btn-sm btn-delete" data-id="${userAddAjaxModel.UserDto.User.Id}"><span class="fas fa-minus-circle"></span></button>
                             `
-                            ]).draw();
+                            ]).node();
+                            const jqueryTableRow = $(newTableRow);
+                            jqueryTableRow.attr('name', `${userAddAjaxModel.UserDto.User.Id}`);
+                            dataTable.row(newTableRow).draw();
                             toastr.success(`${userAddAjaxModel.UserDto.Message}`, 'Başarılı İşlem!');
                         } else {
                             let summaryText = "";
@@ -166,7 +171,7 @@
             });
     });
 
-    /* Ajax POST / Posting the FormData as CategoryAddDto ends here. */
+    /* Ajax POST / Posting the FormData as UserAddDto ends here. */
 
     /* Ajax POST / Deleting a User starts from here */
 
