@@ -8,6 +8,7 @@ using Core.Utilities.Extensions;
 using Core.Utilities.Results.ComplexTypes;
 using Entities.Concrete;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,16 +22,18 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IWebHostEnvironment _env;
         private readonly IMapper _mapper;
 
-        public UserController(UserManager<User> userManager, IWebHostEnvironment env, IMapper mapper)
+        public UserController(UserManager<User> userManager, IWebHostEnvironment env, IMapper mapper, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _env = env;
             _mapper = mapper;
+            _signInManager = signInManager;
         }
-
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -40,6 +43,44 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 ResultStatus = ResultStatus.Success
             });
         }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View("UserLogin");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLoginDto userLoginDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(userLoginDto.Email);
+                if (user != null)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, userLoginDto.Password, userLoginDto.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");
+                        return View("UserLogin");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "E-posta adresiniz veya şifreniz yanlıştır.");
+                    return View("UserLogin");
+                }
+            }
+            else
+            {
+                return View("UserLogin");
+            }
+        }
+        [Authorize]
         [HttpGet]
         public async Task<JsonResult> GetAllUsers()
         {
@@ -54,17 +95,19 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             });
             return Json(userListDto);
         }
+        [Authorize]
         [HttpGet]
         public IActionResult Add()
         {
             return PartialView("_UserAddPartial");
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(UserAddDto userAddDto)
         {
             if (ModelState.IsValid)
             {
-                userAddDto.Picture = await ImageUpload(userAddDto.UserName,userAddDto.PictureFile);
+                userAddDto.Picture = await ImageUpload(userAddDto.UserName, userAddDto.PictureFile);
                 var user = _mapper.Map<User>(userAddDto);
                 var result = await _userManager.CreateAsync(user, userAddDto.Password);
                 if (result.Succeeded)
@@ -103,6 +146,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return Json(userAddAjaxModelStateErrorModel);
 
         }
+        [Authorize]
         public async Task<JsonResult> Delete(int userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -135,6 +179,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<PartialViewResult> Update(int userId)
         {
@@ -143,6 +188,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return PartialView("_UserUpdatePartial", userUpdateDto);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Update(UserUpdateDto userUpdateDto)
         {
@@ -203,6 +249,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             }
         }
 
+        [Authorize]
         public async Task<string> ImageUpload(string userName, IFormFile pictureFile)
         {
             string wwwroot = _env.WebRootPath;
@@ -217,6 +264,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             return fileName;
         }
 
+        [Authorize]
         public bool ImageDelete(string pictureName)
         {
             string wwwroot = _env.WebRootPath;
