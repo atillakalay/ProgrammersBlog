@@ -1,4 +1,6 @@
-﻿<div id="layoutSidenav_nav">
+﻿@model ProgrammersBlog.Mvc.Areas.Admin.Models.UserWithRolesViewModel
+
+<div id="layoutSidenav_nav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
@@ -20,20 +22,23 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                     Yorumlar
                 </a>
-                <div class="sb-sidenav-menu-heading">Kullanıcılar</div>
-                <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
-                    <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
-                    Roller
-                </a>
-                <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
-                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                    Kullanıcılar
-                </a>
+                @if (Model.Roles.Any(r=>r.Equals("Admin")))
+                {
+                    <div class="sb-sidenav-menu-heading">Kullanıcılar</div>
+                    <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
+                        <div class="sb-nav-link-icon"><i class="fas fa-user-shield"></i></div>
+                        Roller
+                    </a>
+                    <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
+                        <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                        Kullanıcılar
+                    </a>
+                }
             </div>
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Giriş Yapan Kullanıcı:</div>
-            Atilla Kalay
+            @Model.User.UserName
         </div>
     </nav>
 </div>
