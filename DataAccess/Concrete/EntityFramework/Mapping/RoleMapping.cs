@@ -37,6 +37,23 @@ namespace DataAccess.Concrete.EntityFramework.Mapping
 
             // Each Role can have many associated RoleClaims
             builder.HasMany<RoleClaim>().WithOne().HasForeignKey(rc => rc.RoleId).IsRequired();
+
+            builder.HasData(
+                new Role
+                {
+                    Id = 1,
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = new Guid().ToString()
+                },
+                new Role
+                {
+                    Id = 1,
+                    Name = "Editor",
+                    NormalizedName = "EDITOR",
+                    ConcurrencyStamp = new Guid().ToString()
+                }
+            );
         }
     }
 }
