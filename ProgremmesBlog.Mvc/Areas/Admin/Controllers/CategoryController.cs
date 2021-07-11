@@ -6,11 +6,13 @@ using Business.Abstract;
 using Core.Utilities.Extensions;
 using Core.Utilities.Results.ComplexTypes;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,Editor")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
