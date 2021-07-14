@@ -1,5 +1,4 @@
 ﻿@model Entities.Dtos.UserAddDto
-
 <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -12,33 +11,32 @@
             <div class="modal-body">
                 <form asp-action="Add" id="form-user-add">
                     <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
-                    <div asp-validation-summary="All" class="text-danger" id="validation-summary" aria-hidden="true" style="display:none"></div>
+                    <div asp-validation-summary="All" class="text-danger" id="validation-summary" aria-hidden="true" style="display: none;"></div>
                     <div class="form-group">
                         <label asp-for="UserName"></label>
-                        <input class="form-control" asp-for="UserName" placeholder="Lütfen, kullanıcı adı giriniz."/>
+                        <input class="form-control" asp-for="UserName" placeholder="Lütfen, kullanıcı adı giriniz." />
                         <span class="text-danger" asp-validation-for="UserName"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Email"></label>
-                        <input class="form-control" asp-for="Email" type="email" placeholder="Lütfen, email giriniz."/>
+                        <input type="email" class="form-control" asp-for="Email" placeholder="Lütfen, e-posta adresi giriniz." />
                         <span class="text-danger" asp-validation-for="Email"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Password"></label>
-                        <input class="form-control" asp-for="Password" type="password" placeholder="Lütfen, şifre giriniz." />
+                        <input type="password" class="form-control" asp-for="Password" placeholder="Lütfen, şifre giriniz." />
                         <span class="text-danger" asp-validation-for="Password"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="PhoneNumber"></label>
-                        <input class="form-control" asp-for="PhoneNumber" type="tel" placeholder="Lütfen, telefon numarası giriniz." />
+                        <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Lütfen, telefon numarası giriniz." />
                         <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="PictureFile"></label>
-                        <input class="form-control-file" asp-for="PictureFile" type="file" accept="image/*" />
+                        <input type="file" accept="image/*" class="form-control-file" asp-for="PictureFile" placeholder="Lütfen, telefon numarası giriniz." />
                         <span class="text-danger" asp-validation-for="PictureFile"></span>
                     </div>
-                   
                 </form>
             </div>
             <div class="modal-footer">

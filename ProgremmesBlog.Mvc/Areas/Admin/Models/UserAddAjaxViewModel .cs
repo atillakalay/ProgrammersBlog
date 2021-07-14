@@ -10,6 +10,6 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Models
     {
         public UserAddDto UserAddDto { get; set; }
         public string UserAddPartial { get; set; }
-        public UserDto userDto { get; set; }    
+        public UserDto UserDto { get; set; }    
     }
 }

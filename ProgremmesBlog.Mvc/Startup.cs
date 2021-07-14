@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,8 @@ using Business.AutoMapper.Profiles;
 using Business.Extensions;
 using Microsoft.AspNetCore.Http;
 using ProgrammersBlog.Mvc.AutoMapper.Profiles;
+using ProgrammersBlog.Mvc.Helpers.Abstract;
+using ProgrammersBlog.Mvc.Helpers.Concrete;
 
 namespace ProgrammersBlog.Mvc
 {
@@ -24,6 +27,7 @@ namespace ProgrammersBlog.Mvc
             services.AddSession();
             services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile), typeof(UserProfile));
             services.LoadMyServices();
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/Admin/User/Login");

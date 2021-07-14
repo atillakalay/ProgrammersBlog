@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-
-namespace Core.Utilities.Extensions
+namespace ProgrammersBlog.Shared.Utilities.Extensions
 {
-
     public static class ControllerExtensions
     {
         /// <summary>
@@ -113,4 +111,3 @@ namespace Core.Utilities.Extensions
 
     }
 }
-
