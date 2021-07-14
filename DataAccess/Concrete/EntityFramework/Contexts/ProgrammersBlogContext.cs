@@ -7,9 +7,13 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
 {
     public class ProgrammersBlogContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"Server=DESKTOP-9NPFMUJ;Database=ProgrammersBlog;Trusted_Connection=True;Connect Timeout=30;MultipleActiveResultSets=True;");
+        //}
+        public ProgrammersBlogContext(DbContextOptions<ProgrammersBlogContext> options):base(options)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-9NPFMUJ;Database=ProgrammersBlog;Trusted_Connection=True;Connect Timeout=30;MultipleActiveResultSets=True;");
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

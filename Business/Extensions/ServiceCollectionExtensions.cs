@@ -4,15 +4,16 @@ using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework.Contexts;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Business.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection,string connectionString)
         {
-            serviceCollection.AddDbContext<ProgrammersBlogContext>();
+            serviceCollection.AddDbContext<ProgrammersBlogContext>(options=>options.UseSqlServer(connectionString));
             serviceCollection.AddIdentity<User, Role>(options =>
             {
                 //User Password Options
