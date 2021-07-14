@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Business.Abstract;
+using Business.Utilities;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.ComplexTypes;
 using Core.Utilities.Results.Concrete;
@@ -18,7 +19,7 @@ namespace Business.Concrete
 
         public ArticleManager(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -33,8 +34,7 @@ namespace Business.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-
-            return new DataResult<ArticleDto>(ResultStatus.Error, "Böyle bir makale bulunamadı", null);
+            return new DataResult<ArticleDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAll()
@@ -48,7 +48,7 @@ namespace Business.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Makaleler bulunamadı", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeleted()
@@ -62,12 +62,14 @@ namespace Business.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Makaleler bulunamadı", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActive()
         {
-            var articles = await _unitOfWork.Articles.GetAllAsync(a => !a.IsDeleted && a.IsActive, ar => ar.User, ar => ar.Category);
+            var articles =
+                await _unitOfWork.Articles.GetAllAsync(a => !a.IsDeleted && a.IsActive, ar => ar.User,
+                    ar => ar.Category);
             if (articles.Count > -1)
             {
                 return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
@@ -76,7 +78,7 @@ namespace Business.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Makaleler bulunamadı", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAllByCategory(int categoryId)
@@ -84,7 +86,8 @@ namespace Business.Concrete
             var result = await _unitOfWork.Categories.AnyAsync(c => c.Id == categoryId);
             if (result)
             {
-                var articles = await _unitOfWork.Articles.GetAllAsync(a => a.CategoryId == categoryId && !a.IsDeleted && !a.IsActive, ar => ar.User, ar => ar.Category);
+                var articles = await _unitOfWork.Articles.GetAllAsync(
+                    a => a.CategoryId == categoryId && !a.IsDeleted && a.IsActive, ar => ar.User, ar => ar.Category);
                 if (articles.Count > -1)
                 {
                     return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
@@ -93,9 +96,10 @@ namespace Business.Concrete
                         ResultStatus = ResultStatus.Success
                     });
                 }
-                return new DataResult<ArticleListDto>(ResultStatus.Error, "Makaleler bulunamadı", null);
+                return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Böyle bir kategori bulunamadı", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Category.NotFound(isPlural: false), null);
+
         }
 
         public async Task<IResult> Add(ArticleAddDto articleAddDto, string createdByName)
@@ -106,7 +110,7 @@ namespace Business.Concrete
             article.UserId = 1;
             await _unitOfWork.Articles.AddAsync(article);
             await _unitOfWork.SaveAsync();
-            return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla eklenmiştir.");
+            return new Result(ResultStatus.Success, Messages.Article.Add(article.Title));
         }
 
         public async Task<IResult> Update(ArticleUpdateDto articleUpdateDto, string modifiedByName)
@@ -115,8 +119,7 @@ namespace Business.Concrete
             article.ModifiedByName = modifiedByName;
             await _unitOfWork.Articles.UpdateAsync(article);
             await _unitOfWork.SaveAsync();
-            return new Result(ResultStatus.Success, $"{articleUpdateDto.Title} başlıklı makale başarıyla güncellenmiştir.");
-
+            return new Result(ResultStatus.Success, Messages.Article.Update(article.Title));
         }
 
         public async Task<IResult> Delete(int articleId, string modifiedByName)
@@ -130,9 +133,9 @@ namespace Business.Concrete
                 article.ModifiedDate = DateTime.Now;
                 await _unitOfWork.Articles.UpdateAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla silinmiştir.");
+                return new Result(ResultStatus.Success, Messages.Article.Delete(article.Title));
             }
-            return new Result(ResultStatus.Error, "Böyle bir makale bulunamadı.");
+            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
         }
 
         public async Task<IResult> HardDelete(int articleId)
@@ -143,9 +146,9 @@ namespace Business.Concrete
                 var article = await _unitOfWork.Articles.GetAsync(a => a.Id == articleId);
                 await _unitOfWork.Articles.DeleteAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale veritabanından başarıyla silinmiştir.");
+                return new Result(ResultStatus.Success, Messages.Article.HardDelete(article.Title));
             }
-            return new Result(ResultStatus.Error, "Böyle bir makale bulunamadı.");
+            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
         }
     }
 }
