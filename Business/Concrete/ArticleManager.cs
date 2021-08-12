@@ -37,6 +37,21 @@ namespace Business.Concrete
             return new DataResult<ArticleDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
         }
 
+        public async Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleId)
+        {
+            var result = await _unitOfWork.Articles.AnyAsync(c => c.Id == articleId);
+            if (result)
+            {
+                var article = await _unitOfWork.Articles.GetAsync(c => c.Id == articleId);
+                var articleUpdateDto = _mapper.Map<ArticleUpdateDto>(article);
+                return new DataResult<ArticleUpdateDto>(ResultStatus.Success, articleUpdateDto);
+            }
+            else
+            {
+                return new DataResult<ArticleUpdateDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
+            }
+        }
+
         public async Task<IDataResult<ArticleListDto>> GetAllAsync()
         {
             var articles = await _unitOfWork.Articles.GetAllAsync(null, a => a.User, a => a.Category);
@@ -166,7 +181,7 @@ namespace Business.Concrete
 
         public async Task<IDataResult<int>> CountByNonDeletedAsync()
         {
-            var aritclesCount = await _unitOfWork.Articles.CountAsync(a=>a.IsActive);
+            var aritclesCount = await _unitOfWork.Articles.CountAsync(a => a.IsActive);
             if (aritclesCount > -1)
             {
                 return new DataResult<int>(ResultStatus.Success, aritclesCount);
