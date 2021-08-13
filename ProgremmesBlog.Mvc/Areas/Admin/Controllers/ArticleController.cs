@@ -41,7 +41,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var result = await _categoryService.GetAllByNonDeletedAsync();
+            var result = await _categoryService.GetAllByNonDeletedAndActiveAsync();
             if (result.ResultStatus == ResultStatus.Success)
             {
                 return View(new ArticleAddViewModel
@@ -74,6 +74,23 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             }
 
             return View(articleAddViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int articleId)
+        {
+            var articleResult = await _articleService.GetArticleUpdateDtoAsync(articleId);
+            var categoriesResult = await _categoryService.GetAllByNonDeletedAndActiveAsync();
+            if (articleResult.ResultStatus == ResultStatus.Success && categoriesResult.ResultStatus == ResultStatus.Success)
+            {
+                var articleUpdateViewModel = Mapper.Map<ArticleUpdateViewModel>(articleResult.Data);
+                articleUpdateViewModel.Categories = categoriesResult.Data.Categories;
+                return View(articleUpdateViewModel);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
