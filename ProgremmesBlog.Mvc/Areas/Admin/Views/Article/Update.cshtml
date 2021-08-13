@@ -13,6 +13,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
+                    <input type="hidden" asp-for="Id" />
                     <div class="form-group">
                         <input type="text" id="articleTitle" class="form-control" placeholder="Makale Başlığı" asp-for="Title" />
                         <span asp-validation-for="Title" class="text-danger"></span>
