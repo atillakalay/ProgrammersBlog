@@ -93,5 +93,45 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 return NotFound();
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> Update(ArticleUpdateViewModel articleUpdateViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bool isNewThumbNailUploaded = false;
+                var oldThumbNail = articleUpdateViewModel.ThumbNail;
+                if (articleUpdateViewModel.ThumbnailFile != null)
+                {
+                    var uploadedImageResult = await ImageHelper.Upload(articleUpdateViewModel.Title,
+                        articleUpdateViewModel.ThumbnailFile, PictureType.Post);
+                    articleUpdateViewModel.ThumbNail = uploadedImageResult.ResultStatus == ResultStatus.Success
+                        ? uploadedImageResult.Data.FullName
+                        : "postImages/defaultThumbnail.jpg";
+                    if (oldThumbNail != "postImages/defaultThumbnail.jpg")
+                    {
+                        isNewThumbNailUploaded = true;
+                    }
+                }
+                var articleUpdateDto = Mapper.Map<ArticleUpdateDto>(articleUpdateViewModel);
+                var result = await _articleService.UpdateAsync(articleUpdateDto, LoggedInUser.UserName);
+                if (result.ResultStatus == ResultStatus.Success)
+                {
+                    if (isNewThumbNailUploaded)
+                    {
+                        ImageHelper.Delete(oldThumbNail);
+                    }
+                    TempData.Add("SuccessMessage", result.Message);
+                    return RedirectToAction("Index", "Article");
+                }
+                else
+                {
+                    ModelState.AddModelError("", result.Message);
+                }
+            }
+
+            var categories = await _categoryService.GetAllByNonDeletedAndActiveAsync();
+            articleUpdateViewModel.Categories = categories.Data.Categories;
+            return View(articleUpdateViewModel);
+        }
     }
 }

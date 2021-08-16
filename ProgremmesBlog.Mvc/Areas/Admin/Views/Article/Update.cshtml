@@ -14,6 +14,7 @@
             <div class="card">
                 <div class="card-body">
                     <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
                     <div class="form-group">
                         <input type="text" id="articleTitle" class="form-control" placeholder="Makale Başlığı" asp-for="Title" />
                         <span asp-validation-for="Title" class="text-danger"></span>
