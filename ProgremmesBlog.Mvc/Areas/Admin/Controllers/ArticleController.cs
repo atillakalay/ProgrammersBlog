@@ -7,8 +7,10 @@ using Entities.ComplexTypes;
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
 using ProgrammersBlog.Mvc.Helpers.Abstract;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {
@@ -128,10 +130,17 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                     ModelState.AddModelError("", result.Message);
                 }
             }
-
             var categories = await _categoryService.GetAllByNonDeletedAndActiveAsync();
             articleUpdateViewModel.Categories = categories.Data.Categories;
             return View(articleUpdateViewModel);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Delete(int articleId)
+        {
+            var result = await _articleService.DeleteAsync(articleId, LoggedInUser.UserName);
+            var articleResult = JsonSerializer.Serialize(result);
+            return Json(articleResult);
         }
     }
 }

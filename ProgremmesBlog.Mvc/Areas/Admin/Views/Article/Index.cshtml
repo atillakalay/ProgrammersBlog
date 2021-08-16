@@ -54,7 +54,7 @@
                 <tbody>
                     @foreach (var article in Model.Articles)
                     {
-                        <tr>
+                        <tr name="@article.Id">
                             <td>@article.Id</td>
                             <td>@article.Category.Name</td>
                             <td>@article.Title</td>
