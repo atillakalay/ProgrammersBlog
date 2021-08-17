@@ -26,44 +26,54 @@
                 action: function (e, dt, node, config) {
                     $.ajax({
                         type: 'GET',
-                        url: '/Admin/User/GetAllUsers/',
+                        url: '/Admin/Article/GetAllArticles/',
                         contentType: "application/json",
                         beforeSend: function () {
-                            $('#usersTable').hide();
+                            $('#articlesTable').hide();
                             $('.spinner-border').show();
                         },
                         success: function (data) {
-                            const userListDto = jQuery.parseJSON(data);
+                            const articleResult = jQuery.parseJSON(data);
                             dataTable.clear();
-                            console.log(userListDto);
-                            if (userListDto.ResultStatus === 0) {
-                                $.each(userListDto.Users.$values,
-                                    function (index, user) {
+                            console.log(articleResult);
+                            if (articleResult.Data.ResultStatus === 0) {
+                                $.each(articleResult.Data.Articles.$values,
+                                    function (index, article) {
+                                        const newArticle = getJsonNetObject(article, articleResult.Data.Articles.$values);
+                                        console.log(newArticle);
                                         const newTableRow = dataTable.row.add([
-                                            user.Id,
-                                            user.UserName,
-                                            user.Email,
-                                            user.PhoneNumber,
-                                            `<img src="/img/${user.Picture}" alt="${user.UserName}" class="my-image-table" />`,
+                                            newArticle.Id,
+                                            newArticle.Category.Name,
+                                            newArticle.Title,
+                                            `<img src="/img/${newArticle.Thumbnail}" alt="${newArticle.Title}" class="my-image-table" />`,
+                                            `${convertToShortDate(newArticle.Date)}`,
+                                            newArticle.ViewsCount,
+                                            newArticle.CommentCount,
+                                            `${newArticle.IsActive ? "Evet" : "Hayır"}`,
+                                            `${newArticle.IsDeleted ? "Evet" : "Hayır"}`,
+                                            `${convertToShortDate(newArticle.CreatedDate)}`,
+                                            newArticle.CreatedByName,
+                                            `${convertToShortDate(newArticle.ModifiedDate)}`,
+                                            newArticle.ModifiedByName,
                                             `
-                                <button class="btn btn-primary btn-sm btn-update" data-id="${user.Id}"><span class="fas fa-edit"></span></button>
-                                <button class="btn btn-danger btn-sm btn-delete" data-id="${user.Id}"><span class="fas fa-minus-circle"></span></button>
+                                <button class="btn btn-primary btn-sm btn-update" data-id="${newArticle.Id}"><span class="fas fa-edit"></span></button>
+                                <button class="btn btn-danger btn-sm btn-delete" data-id="${newArticle.Id}"><span class="fas fa-minus-circle"></span></button>
                                             `
                                         ]).node();
                                         const jqueryTableRow = $(newTableRow);
-                                        jqueryTableRow.attr('name', `${user.Id}`);
+                                        jqueryTableRow.attr('name', `${newArticle.Id}`);
                                     });
                                 dataTable.draw();
                                 $('.spinner-border').hide();
-                                $('#usersTable').fadeIn(1400);
+                                $('#articlesTable').fadeIn(1400);
                             } else {
-                                toastr.error(`${userListDto.Message}`, 'İşlem Başarısız!');
+                                toastr.error(`${articleResult.Data.Message}`, 'İşlem Başarısız!');
                             }
                         },
                         error: function (err) {
                             console.log(err);
                             $('.spinner-border').hide();
-                            $('#usersTable').fadeIn(1000);
+                            $('#articlesTable').fadeIn(1000);
                             toastr.error(`${err.responseText}`, 'Hata!');
                         }
                     });
