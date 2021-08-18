@@ -314,7 +314,7 @@
                                 dataTable.row(tableRow).invalidate();
                                 Swal.fire(
                                     'Onaylandı!',
-                                    `${commentId }no'lu yorum başarıyla onaylanmıştır.`,
+                                    `${commentResult.Data.Comment.Id} no'lu yorum başarıyla onaylanmıştır.`,
                                     'success'
                                 );
 
