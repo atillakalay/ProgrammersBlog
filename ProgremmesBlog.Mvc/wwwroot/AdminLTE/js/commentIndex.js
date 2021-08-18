@@ -248,6 +248,26 @@
 
     });
 
+
+    // Get Detail Ajax Operation
+
+    $(function() {
+        const url = '/Admin/Comment/GetDetail/';
+        const placeHolderDiv = $('#modalPlaceHolder');
+        $(document).on('click',
+            '.btn-detail',
+            function (event) {
+                event.preventDefault();
+                const id = $(this).attr('data-id');
+                $.get(url, { commentId: id }).done(function (data) {
+                    placeHolderDiv.html(data);
+                    placeHolderDiv.find('.modal').modal('show');
+                }).fail(function (err) {
+                    toastr.error(`${err.responseText}`, 'Hata!');
+                });
+            });
+    });
+
     function getButtonsForDataTable(comment) {
         if (!comment.IsActive) {
             return `
