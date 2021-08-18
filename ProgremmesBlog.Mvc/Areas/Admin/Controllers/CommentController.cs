@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
+using Business.Abstract;
 using Core.Utilities.Results.ComplexTypes;
 using Entities.Concrete;
 using Entities.Dtos;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
 using ProgrammersBlog.Mvc.Helpers.Abstract;
 using ProgrammersBlog.Shared.Utilities.Extensions;
-using Services.Abstract;
 
 namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 {
@@ -60,6 +60,19 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             var commentResult = JsonSerializer.Serialize(result);
             return Json(commentResult);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Approve(int commentId)
+        {
+            var result = await _commentService.ApproveAsync(commentId, LoggedInUser.UserName);
+            var commentResult = JsonSerializer.Serialize(result,new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(commentResult);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Update(int commentId)
         {

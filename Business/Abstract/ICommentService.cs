@@ -3,7 +3,7 @@ using Core.Utilities.Results.Abstract;
 using Entities.Dtos;
 using ProgrammersBlog.Entities.Dtos;
 
-namespace Services.Abstract
+namespace Business.Abstract
 {
     public interface ICommentService
     {
@@ -13,6 +13,7 @@ namespace Services.Abstract
         Task<IDataResult<CommentListDto>> GetAllByDeletedAsync();
         Task<IDataResult<CommentListDto>> GetAllByNonDeletedAsync();
         Task<IDataResult<CommentListDto>> GetAllByNonDeletedAndActiveAsync();
+        Task<IDataResult<CommentDto>> ApproveAsync(int commentId,string modifiedByName);
         Task<IDataResult<CommentDto>> AddAsync(CommentAddDto commentAddDto);
         Task<IDataResult<CommentDto>> UpdateAsync(CommentUpdateDto commentUpdateDto, string modifiedByName);
         Task<IDataResult<CommentDto>> DeleteAsync(int commentId, string modifiedByName);

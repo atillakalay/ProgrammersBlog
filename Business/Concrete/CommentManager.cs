@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Business.Concrete;
+using Business.Abstract;
 using Business.Utilities;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.ComplexTypes;
@@ -10,9 +10,8 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
 using ProgrammersBlog.Entities.Dtos;
-using Services.Abstract;
 
-namespace Business.Abstract
+namespace Business.Concrete
 {
     public class CommentManager : ManagerBase, ICommentService
     {
@@ -114,6 +113,25 @@ namespace Business.Abstract
             {
                 Comments = null,
             });
+        }
+
+        public async Task<IDataResult<CommentDto>> ApproveAsync(int commentId, string modifiedByName)
+        {
+            var comment = await UnitOfWork.Comments.GetAsync(c => c.Id == commentId, c => c.Article);
+            if (comment != null)
+            {
+                comment.IsActive = true;
+                comment.ModifiedByName = modifiedByName;
+                comment.ModifiedDate = DateTime.Now;
+                var updatedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+                await UnitOfWork.SaveAsync();
+                return new DataResult<CommentDto>(ResultStatus.Success, Messages.Comment.Approve(commentId), new CommentDto
+                {
+                    Comment = updatedComment
+                });
+            }
+
+            return new DataResult<CommentDto>(ResultStatus.Error, Messages.Comment.NotFound(false), null);
         }
 
         public async Task<IDataResult<CommentDto>> AddAsync(CommentAddDto commentAddDto)
