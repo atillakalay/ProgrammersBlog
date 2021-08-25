@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entities.Concrete;
+﻿using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,7 +12,7 @@ namespace DataAccess.Concrete.EntityFramework.Mapping
             builder.HasKey(rc => rc.Id);
 
             // Maps to the AspNetRoleClaims table
-            builder.ToTable("AspNetRoleClaims");
+            builder.ToTable("RoleClaims");
         }
     }
 }

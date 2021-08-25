@@ -18,15 +18,15 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ArticleMapping());
-            modelBuilder.ApplyConfiguration(new CategoryMapping());
-            modelBuilder.ApplyConfiguration(new CommentMapping());
-            modelBuilder.ApplyConfiguration(new RoleMapping());
-            modelBuilder.ApplyConfiguration(new UserMapping());
+            modelBuilder.ApplyConfiguration(new ArticleMap());
+            modelBuilder.ApplyConfiguration(new CategoryMap());
+            modelBuilder.ApplyConfiguration(new CommentMap());
+            modelBuilder.ApplyConfiguration(new RoleMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new RoleClaimMapping());
             modelBuilder.ApplyConfiguration(new UserClaimMapping());
             modelBuilder.ApplyConfiguration(new UserLoginMapping());
-            modelBuilder.ApplyConfiguration(new UserRoleMapping());
+            modelBuilder.ApplyConfiguration(new UserRoleMap());
             modelBuilder.ApplyConfiguration(new UserTokenMapping());
         }
 
