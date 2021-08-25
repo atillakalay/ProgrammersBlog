@@ -15,7 +15,7 @@ namespace Entities.Dtos
         [DisplayName("Şifre")]
         [Required(ErrorMessage = "{0} boş geçilmemelidir.")]
         [MaxLength(30, ErrorMessage = "{0} {1} karekterden büyük olmamalıdır.")]
-        [MinLength(10, ErrorMessage = "{0} {1} karekterden küçük olmamalıdır.")]
+        [MinLength(5, ErrorMessage = "{0} {1} karekterden küçük olmamalıdır.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [DisplayName("Beni Hatırla")]

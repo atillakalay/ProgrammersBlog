@@ -18,7 +18,7 @@ namespace Business.Extensions
             {
                 //User Password Options
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 10;
+                options.Password.RequiredLength = 5;
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireLowercase = false;

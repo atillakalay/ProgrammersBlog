@@ -82,7 +82,7 @@ namespace DataAccess.Concrete.EntityFramework.Mapping
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            adminUser.PasswordHash = CreatePasswordHash(adminUser, "adminuser");
+            adminUser.PasswordHash = CreatePasswordHash(adminUser, "123456789aa");
             var editorUser = new User
             {
                 Id = 2,
@@ -106,7 +106,7 @@ namespace DataAccess.Concrete.EntityFramework.Mapping
                 PhoneNumberConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            editorUser.PasswordHash = CreatePasswordHash(editorUser, "editoruser");
+            editorUser.PasswordHash = CreatePasswordHash(editorUser, "123456789aa");
 
             builder.HasData(adminUser, editorUser);
         }
