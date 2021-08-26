@@ -336,4 +336,79 @@
             });
 
     });
+
+
+    $(function () {
+        const url = '/Admin/Role/Assign/';
+        const placeHolderDiv = $('#modalPlaceHolder');
+        $(document).on('click',
+            '.btn-assign',
+            function (event) {
+                event.preventDefault();
+                const id = $(this).attr('data-id');
+                $.get(url, { userId: id }).done(function (data) {
+                    placeHolderDiv.html(data);
+                    placeHolderDiv.find('.modal').modal('show');
+                }).fail(function (err) {
+                    toastr.error(`${err.responseText}`, 'Hata!');
+                });
+            });
+
+        /* Ajax POST / Updating a Comment starts from here */
+
+        placeHolderDiv.on('click',
+            '#btnUpdate',
+            function (event) {
+                event.preventDefault();
+                const form = $('#form-comment-update');
+                const actionUrl = form.attr('action');
+                const dataToSend = new FormData(form.get(0));
+                $.ajax({
+                    url: actionUrl,
+                    type: 'POST',
+                    data: dataToSend,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        const commentUpdateAjaxModel = jQuery.parseJSON(data);
+                        console.log(commentUpdateAjaxModel);
+                        const newFormBody = $('.modal-body', commentUpdateAjaxModel.CommentUpdatePartial);
+                        placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
+                        const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
+                        if (isValid) {
+                            const id = commentUpdateAjaxModel.CommentDto.Comment.Id;
+                            const tableRow = $(`[name="${id}"]`);
+                            placeHolderDiv.find('.modal').modal('hide');
+                            dataTable.row(tableRow).data([
+                                commentUpdateAjaxModel.CommentDto.Comment.Id,
+                                commentUpdateAjaxModel.CommentDto.Comment.Article.Title,
+                                commentUpdateAjaxModel.CommentDto.Comment.Text.length > 75 ? commentUpdateAjaxModel.CommentDto.Comment.Text.substring(0, 75) : commentUpdateAjaxModel.CommentDto.Comment.Text,
+                                `${commentUpdateAjaxModel.CommentDto.Comment.IsActive ? "Evet" : "Hayır"}`,
+                                `${commentUpdateAjaxModel.CommentDto.Comment.IsDeleted ? "Evet" : "Hayır"}`,
+                                `${convertToShortDate(commentUpdateAjaxModel.CommentDto.Comment.CreatedDate)}`,
+                                commentUpdateAjaxModel.CommentDto.Comment.CreatedByName,
+                                `${convertToShortDate(commentUpdateAjaxModel.CommentDto.Comment.ModifiedDate)}`,
+                                commentUpdateAjaxModel.CommentDto.Comment.ModifiedByName,
+                                getButtonsForDataTable(commentUpdateAjaxModel.CommentDto.Comment)
+                            ]);
+                            tableRow.attr("name", `${id}`);
+                            dataTable.row(tableRow).invalidate();
+                            toastr.success(`${commentUpdateAjaxModel.CommentDto.Comment.Id} no'lu yorum başarıyla güncellenmiştir`, "Başarılı İşlem!");
+                        } else {
+                            let summaryText = "";
+                            $('#validation-summary > ul > li').each(function () {
+                                let text = $(this).text();
+                                summaryText = `*${text}\n`;
+                            });
+                            toastr.warning(summaryText);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        toastr.error(`${err.responseText}`, 'Hata!');
+                    }
+                });
+            });
+
+    });
 });
