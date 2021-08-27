@@ -354,13 +354,13 @@
                 });
             });
 
-        /* Ajax POST / Updating a Comment starts from here */
+        /* Ajax POST / Updating a Role Assign starts from here */
 
         placeHolderDiv.on('click',
-            '#btnUpdate',
+            '#btnAssign',
             function (event) {
                 event.preventDefault();
-                const form = $('#form-comment-update');
+                const form = $('#form-role-assign');
                 const actionUrl = form.attr('action');
                 const dataToSend = new FormData(form.get(0));
                 $.ajax({
@@ -370,30 +370,16 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        const commentUpdateAjaxModel = jQuery.parseJSON(data);
-                        console.log(commentUpdateAjaxModel);
-                        const newFormBody = $('.modal-body', commentUpdateAjaxModel.CommentUpdatePartial);
+                        const userRoleAssignAjaxModel = jQuery.parseJSON(data);
+                        console.log(userRoleAssignAjaxModel);
+                        const newFormBody = $('.modal-body', userRoleAssignAjaxModel.RoleAssignPartial);
                         placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
                         const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
                         if (isValid) {
-                            const id = commentUpdateAjaxModel.CommentDto.Comment.Id;
+                            const id = userRoleAssignAjaxModel.UserDto.User.Id;
                             const tableRow = $(`[name="${id}"]`);
-                            placeHolderDiv.find('.modal').modal('hide');
-                            dataTable.row(tableRow).data([
-                                commentUpdateAjaxModel.CommentDto.Comment.Id,
-                                commentUpdateAjaxModel.CommentDto.Comment.Article.Title,
-                                commentUpdateAjaxModel.CommentDto.Comment.Text.length > 75 ? commentUpdateAjaxModel.CommentDto.Comment.Text.substring(0, 75) : commentUpdateAjaxModel.CommentDto.Comment.Text,
-                                `${commentUpdateAjaxModel.CommentDto.Comment.IsActive ? "Evet" : "Hayır"}`,
-                                `${commentUpdateAjaxModel.CommentDto.Comment.IsDeleted ? "Evet" : "Hayır"}`,
-                                `${convertToShortDate(commentUpdateAjaxModel.CommentDto.Comment.CreatedDate)}`,
-                                commentUpdateAjaxModel.CommentDto.Comment.CreatedByName,
-                                `${convertToShortDate(commentUpdateAjaxModel.CommentDto.Comment.ModifiedDate)}`,
-                                commentUpdateAjaxModel.CommentDto.Comment.ModifiedByName,
-                                getButtonsForDataTable(commentUpdateAjaxModel.CommentDto.Comment)
-                            ]);
-                            tableRow.attr("name", `${id}`);
-                            dataTable.row(tableRow).invalidate();
-                            toastr.success(`${commentUpdateAjaxModel.CommentDto.Comment.Id} no'lu yorum başarıyla güncellenmiştir`, "Başarılı İşlem!");
+                            //placeHolderDiv.find('.modal').modal('hide');
+                            toastr.success(`${userRoleAssignAjaxModel.UserDto.Message}`, "Başarılı İşlem!");
                         } else {
                             let summaryText = "";
                             $('#validation-summary > ul > li').each(function () {
