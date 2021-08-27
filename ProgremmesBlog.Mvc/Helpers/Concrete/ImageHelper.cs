@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.ComplexTypes;
@@ -38,6 +39,11 @@ namespace ProgrammersBlog.Mvc.Helpers.Concrete
             }
             string oldFileName = Path.GetFileNameWithoutExtension(pictureFile.FileName);
             string fileExtension = Path.GetExtension(pictureFile.FileName);
+
+
+            Regex regex = new Regex("[*'\",._&#^@]");
+            name = regex.Replace(name,string.Empty);
+
             DateTime dateTime = DateTime.Now;
             // AtillaKalay_587_5_38_12_3_10_2020.png
             string newFileName = $"{name}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
