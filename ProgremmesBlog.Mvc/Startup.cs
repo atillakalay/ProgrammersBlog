@@ -26,13 +26,16 @@ namespace ProgrammersBlog.Mvc
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddRazorRuntimeCompilation().AddJsonOptions(opt =>
+            services.AddControllersWithViews(options =>
+            {
+                options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(value => "Bu alan boþ geçilmemelidir.");
+            }).AddRazorRuntimeCompilation().AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
             }).AddNToastNotifyToastr();
             services.AddSession();
-            services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile), typeof(UserProfile), typeof(ViewModelsProfile),typeof(CommentProfile));
+            services.AddAutoMapper(typeof(CategoryProfile), typeof(ArticleProfile), typeof(UserProfile), typeof(ViewModelsProfile), typeof(CommentProfile));
             services.LoadMyServices(connectionString: Configuration.GetConnectionString("LocalDB"));
             services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
