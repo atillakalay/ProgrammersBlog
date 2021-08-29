@@ -42,7 +42,7 @@ namespace ProgrammersBlog.Mvc.Helpers.Concrete
 
 
             Regex regex = new Regex("[*'\",._&#^@]");
-            name = regex.Replace(name,string.Empty);
+            name = regex.Replace(name, string.Empty);
 
             DateTime dateTime = DateTime.Now;
             // AtillaKalay_587_5_38_12_3_10_2020.png

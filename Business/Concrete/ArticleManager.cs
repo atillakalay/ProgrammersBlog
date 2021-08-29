@@ -12,10 +12,10 @@ using Entities.Dtos;
 
 namespace Business.Concrete
 {
-    public class ArticleManager :ManagerBase, IArticleService
+    public class ArticleManager : ManagerBase, IArticleService
     {
 
-        public ArticleManager(IUnitOfWork unitOfWork, IMapper mapper):base(unitOfWork, mapper)
+        public ArticleManager(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
 
@@ -113,6 +113,22 @@ namespace Business.Concrete
 
         }
 
+        public async Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync()
+        {
+            var articles =
+                await UnitOfWork.Articles.GetAllAsync(a => a.IsDeleted, ar => ar.User,
+                    ar => ar.Category);
+            if (articles.Count > -1)
+            {
+                return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
+                {
+                    Articles = articles,
+                    ResultStatus = ResultStatus.Success
+                });
+            }
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
+        }
+
         public async Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId)
         {
             var article = Mapper.Map<Article>(articleAddDto);
@@ -141,6 +157,7 @@ namespace Business.Concrete
             {
                 var article = await UnitOfWork.Articles.GetAsync(a => a.Id == articleId);
                 article.IsDeleted = true;
+                article.IsActive = false;
                 article.ModifiedByName = modifiedByName;
                 article.ModifiedDate = DateTime.Now;
                 await UnitOfWork.Articles.UpdateAsync(article);
@@ -159,6 +176,23 @@ namespace Business.Concrete
                 await UnitOfWork.Articles.DeleteAsync(article);
                 await UnitOfWork.SaveAsync();
                 return new Result(ResultStatus.Success, Messages.Article.HardDelete(article.Title));
+            }
+            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
+        }
+
+        public async Task<IResult> UndoDeleteAsync(int articleId, string modifiedByName)
+        {
+            var result = await UnitOfWork.Articles.AnyAsync(a => a.Id == articleId);
+            if (result)
+            {
+                var article = await UnitOfWork.Articles.GetAsync(a => a.Id == articleId);
+                article.IsDeleted = false;
+                article.IsActive = true;
+                article.ModifiedByName = modifiedByName;
+                article.ModifiedDate = DateTime.Now;
+                await UnitOfWork.Articles.UpdateAsync(article);
+                await UnitOfWork.SaveAsync();
+                return new Result(ResultStatus.Success, Messages.Article.UndoDelete(article.Title));
             }
             return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
         }

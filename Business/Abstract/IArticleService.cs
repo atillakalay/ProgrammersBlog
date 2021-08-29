@@ -9,7 +9,7 @@ using Entities.Dtos;
 
 namespace Business.Abstract
 {
-   public interface IArticleService
+    public interface IArticleService
     {
         Task<IDataResult<ArticleDto>> GetAsync(int articleId);
         Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleId);
@@ -17,10 +17,12 @@ namespace Business.Abstract
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync();
         Task<IDataResult<ArticleListDto>> GetAllByCategoryAsync(int categoryId);
-        Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName,int userId);
+        Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
+        Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId);
         Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName);
         Task<IResult> DeleteAsync(int articleId, string modifiedByName);
         Task<IResult> HardDeleteAsync(int articleId);
+        Task<IResult> UndoDeleteAsync(int articleId, string modifiedByName);
         Task<IDataResult<int>> CountAsync();
         Task<IDataResult<int>> CountByNonDeletedAsync();
     }
