@@ -1,13 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Business.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ProgrammersBlog.Controllers
+namespace ProgrammersBlog.Mvc.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IArticleService _articleService;
+
+        public HomeController(IArticleService articleService)
         {
-            return View();
+            _articleService = articleService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var articleListDto = await _articleService.GetAllByNonDeletedAndActiveAsync();
+            return View(articleListDto.Data);
         }
     }
 }
