@@ -1,8 +1,8 @@
 ﻿@using System.Text.RegularExpressions
 @model Entities.Dtos.ArticleListDto
 @{ ViewBag.Title = "Anasayfa";
-                Layout = "_Layout";
-                Regex regex = new Regex("<[^>]*>"); }
+    Layout = "_Layout";
+    Regex regex = new Regex("<[^>]*>"); }
 
 <div class="col-md-8">
 
@@ -12,29 +12,64 @@
 
     @foreach (var article in Model.Articles)
     {<!-- Blog Post -->
-                <div class="card mb-4">
-                    <img class="card-img-top" src="~/img/@article.Thumbnail" alt="@article.Title">
-                    <div class="card-body">
-                        <h2 class="card-title">@article.Title</h2>
-                        <p class="card-text">
-                            @{ article.Content = regex.Replace(article.Content, ""); }
-                            @(article.Content.Length>150 ? article.Content.Substring(0,250) : article.Content)
-                        </p>
-                        <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@article.Id" class="btn btn-primary"> Daha fazla oku &rarr;</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        @article.User.UserName tarafından @article.Date tarihinde paylaşıldı.
-                    </div>
-                </div>}
+                        <div class="card mb-4">
+                            <img class="card-img-top" src="~/img/@article.Thumbnail" alt="@article.Title">
+                            <div class="card-body">
+                                <h2 class="card-title">@article.Title</h2>
+                                <p class="card-text">
+                                    @{ article.Content = regex.Replace(article.Content, ""); }
+                                    @(article.Content.Length>150 ? article.Content.Substring(0,250) : article.Content)
+                                </p>
+                                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@article.Id" class="btn btn-primary"> Daha fazla oku &rarr;</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                @article.User.UserName tarafından @article.Date tarihinde paylaşıldı.
+                            </div>
+                        </div>}
 
     <!-- Pagination -->
     <ul class="pagination justify-content-center mb-4">
-        <li class="page-item">
-            <a class="page-link" href="#">&larr; Eski</a>
-        </li>
-        <li class="page-item disabled">
-            <a class="page-link" href="#">Yeni &rarr;</a>
-        </li>
+        @{
+                        @if (Model.ShowPrevious)
+                        {
+            @if (Model.CategoryId != null)
+            {
+<li class="page-item">
+    <a class="page-link" asp-route-currentPage="@(Model.CurrentPage-1)" asp-route-categoryId="@Model.CategoryId.Value">Önceki</a>
+</li>
+ }
+else
+{
+<li class="page-item">
+    <a class="page-link" asp-route-currentPage="@(Model.CurrentPage-1)">Önceki</a>
+</li>
+}      }
+                                    @for (var i = 1; i <= Model.TotalPages; i++)
+                                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            @if (Model.CategoryId != null)
+                            {
+            <a class="page-link" asp-route-currentPage="@i" asp-route-categoryId="@Model.CategoryId.Value">@i</a> }
+        else
+        {
+
+<a class="page-link" asp-route-currentPage="@i">@i</a>}
+                        </li>
+}
+                                                @if (Model.ShowNext)
+                                                {
+                                    @if (Model.CategoryId != null)
+                                    {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-currentPage="@(Model.CurrentPage+1)" asp-route-categoryId="@Model.CategoryId.Value">Sonraki</a>
+                    </li>
+ }
+                else
+                {
+<li class="page-item">
+    <a class="page-link" asp-route-currentPage="@(Model.CurrentPage+1)">Sonraki</a>
+</li>
+}} }
     </ul>
 
 </div>
