@@ -5,13 +5,16 @@
     <div class="card my-4">
         <h5 class="card-header">Arama</h5>
         <div class="card-body">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Aramak istediğiniz anahtar kelime...">
-                <span class="input-group-append">
-                    <button class="btn btn-secondary" type="button">Ara!</button>
-                </span>
-            </div>
+            <form asp-controller="Article" asp-action="Search" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" placeholder="Aramak istediğiniz anahtar kelime...">
+                    <span class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">Ara!</button>
+                    </span>
+                </div>
+            </form>
         </div>
+
     </div>
 
     <!-- Categories Widget -->
@@ -26,10 +29,9 @@
                         </li>
                         @foreach (var category in Model.Categories)
                         {
-                            <li class="list-group-item">
-                                <a asp-controller="Home" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
-                            </li>
-                        }
+            <li class="list-group-item">
+                <a asp-controller="Home" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
+            </li>}
                     </ul>
                 </div>
             </div>
@@ -48,19 +50,17 @@
                     <ul class="list-group">
                         @for (int i = 0; i < Model.Articles.Count; i++)
                         {
-                            if (i%2==0)
+                            if (i % 2 == 0)
                             {
-                                <li class="list-group-item list-group-item-primary">
-                                    <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@Model.Articles[i].Id">@Model.Articles[i].Title</a>
-                                </li>
-                            }
+            <li class="list-group-item list-group-item-primary">
+                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@Model.Articles[i].Id">@Model.Articles[i].Title</a>
+            </li> }
                             else
                             {
-                                <li class="list-group-item list-group-item-info">
-                                    <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@Model.Articles[i].Id">@Model.Articles[i].Title</a>
-                                </li>
-                            }
-           }
+            <li class="list-group-item list-group-item-info">
+                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@Model.Articles[i].Id">@Model.Articles[i].Title</a>
+            </li>}
+                        }
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,98 @@
+﻿@using System.Text.RegularExpressions
+@model ProgrammersBlog.Mvc.Models.ArticleSearchViewModel
+@{ ViewBag.Title = "Arama Sonuçları";
+    Layout = "_Layout";
+    Regex regex = new Regex("<[^>]*>"); }
+
+<div class="col-md-8">
+
+    <h1 class="my-4">
+        Arama Sonuçları
+    </h1>
+    <form>
+        <div class="form-row">
+            <input type="hidden" id="keyword" value="@Model.Keyword    />
+            <input type="hidden" id="current-page" value="@Model.ArticleListDto.CurrentPage" />
+            <div class="form-group col-md-6">
+                <select class="form-control" id="select-page-size">
+                    <option selected="@(Model.ArticleListDto.PageSize == 5 ? "selected" : null)" value="5">5</option>
+                    <option selected="@(Model.ArticleListDto.PageSize == 10 ? "selected" : null)" value="10">10</option>
+                    <option selected="@(Model.ArticleListDto.PageSize == 20 ? "selected" : null)" value="20">20</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <select class="form-control" id="select-is-ascending">
+                    <option selected="@(Model.ArticleListDto.IsAscending == false ? "selected" : null)" value="false">En Yeni</option>
+                    <option selected="@(Model.ArticleListDto.IsAscending ? "selected" : null)" value="true">En Eski</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+    @foreach (var article in Model.ArticleListDto.Articles)
+    {<!-- Blog Post -->
+                        <div class="card mb-4">
+                            <img class="card-img-top" src="~/img/@article.Thumbnail" alt="@article.Title">
+                            <div class="card-body">
+                                <h2 class="card-title">@article.Title</h2>
+                                <p class="card-text">
+                                    @{ article.Content = regex.Replace(article.Content, ""); }
+                                    @(article.Content.Length>250 ? article.Content.Substring(0,250) : article.Content)
+                                </p>
+                                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@article.Id" class="btn btn-primary">Daha fazla oku &rarr;</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                @article.User.UserName tarafından @article.Date tarihinde paylaşıldı.
+                            </div>
+                        </div>}
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center mb-4">
+        @{
+                        @if (Model.ArticleListDto.ShowPrevious)
+                        {
+            <li class="page-item">
+                <a class="page-link" asp-route-currentPage="@(Model.ArticleListDto.CurrentPage-1)" asp-route-isAscending="@Model.ArticleListDto.IsAscending" asp-route-pageSize="@Model.ArticleListDto.PageSize" asp-route-keyword="@Model.Keyword">Önceki</a>
+            </li>
+}
+                                    @for (var i = 1; i <= Model.ArticleListDto.TotalPages; i++)
+                                    {
+                        <li class="page-item @(i == Model.ArticleListDto.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-route-currentPage="@i" asp-route-isAscending="@Model.ArticleListDto.IsAscending" asp-route-pageSize="@Model.ArticleListDto.PageSize" asp-route-keyword="@Model.Keyword">@i</a>
+                        </li>
+}
+                                                @if (Model.ArticleListDto.ShowNext)
+                                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-route-currentPage="@(Model.ArticleListDto.CurrentPage+1)" asp-route-isAscending="@Model.ArticleListDto.IsAscending" asp-route-pageSize="@Model.ArticleListDto.PageSize" asp-route-keyword="@Model.Keyword">Sonraki</a>
+                                    </li>
+} }
+    </ul>
+
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $(function () {
+
+                const selectPageSize = $('#select-page-size');
+                const selectIsAscending = $('#select-is-ascending');
+                const keyword = $('#keyword').val();
+                const currentPage = $('#current-page').val();
+                const keywordQuery = keyword !== null ? `&keyword=${keyword}` : null;
+
+                selectPageSize.on('change',
+                    function () {
+                        window.location =
+                            `/?pageSize=${selectPageSize.val()}&isAscending=${selectIsAscending.val()}${keywordQuery != null ? keywordQuery : null}&currentPage=${currentPage}`;
+                    });
+                selectIsAscending.on('change',
+                    function () {
+                        window.location =
+                            `/?pageSize=${selectPageSize.val()}&isAscending=${selectIsAscending.val()}${keywordQuery != null ? keywordQuery : null}&currentPage=${currentPage}`;
+                    });
+            });
+        });
+    </script>
+}

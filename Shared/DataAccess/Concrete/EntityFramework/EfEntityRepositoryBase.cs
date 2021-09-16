@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.DataAccess.Abstract;
 using Core.Entities.Abstract;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.DataAccess.Concrete.EntityFramework
@@ -75,10 +76,13 @@ namespace Core.DataAccess.Concrete.EntityFramework
             IQueryable<TEntity> query = _context.Set<TEntity>();
             if (predicates.Any())
             {
+                var predicateChain = PredicateBuilder.New<TEntity>();
                 foreach (var predicate in predicates)
                 {
-                    query = query.Where(predicate);
+                    predicateChain.Or(predicate);
                 }
+
+                query = query.Where(predicateChain);
             }
 
             if (includeProperties.Any())
