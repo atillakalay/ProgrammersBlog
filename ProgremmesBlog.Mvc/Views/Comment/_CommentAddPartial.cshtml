@@ -3,7 +3,7 @@
 <div class="card my-4">
     <h5 class="card-header">Bir yorum ekle:</h5>
     <div class="card-body form-card">
-        <form asp-controller="Article" asp-action="Add" method="post" id="form-comment-add">
+        <form asp-controller="Comment" asp-action="Add" method="post" id="form-comment-add">
             <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
             <div asp-validation-summary="All" class="text-danger" id="validation-summary" aria-hidden="true" style="display:none"></div>
             <input asp-for="ArticleId" type="hidden" />
@@ -14,7 +14,7 @@
             <div class="form-group">
                 <textarea class="form-control" rows="3" asp-for="Text"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" id="btnSave">Ekle</button>
+            <button type="button" class="btn btn-primary" id="btnSave">Ekle</button>
         </form>
     </div>
 </div>

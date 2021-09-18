@@ -38,12 +38,16 @@
     <div id="comments">
         @foreach (var comment in Model.Article.Comments)
         {<!-- Single Comment -->
-                            <div class="media mb-4">
-                                <img class="d-flex mr-3 rounded-circle" src="https://randomuser.me/api/portraits/men/45.jpg" alt="">
-                                <div class="media-body">
-                                    <h5 class="mt-0">@comment.CreatedByName</h5>
-                                    @comment.Text
-                                </div>
-                            </div>}
+            <div class="media mb-4">
+                <img class="d-flex mr-3 rounded-circle" src="https://randomuser.me/api/portraits/men/45.jpg" alt="">
+                <div class="media-body">
+                    <h5 class="mt-0">@comment.CreatedByName</h5>
+                    @comment.Text
+                </div>
+            </div>}
     </div>
 </div>
+@section Scripts
+{
+    <script src="~/BlogHome/js/articleDetail.js" type="text/ecmascript"></script>
+}
