@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Core.Utilities.Results.Abstract;
-using Entities.Concrete;
+using Entities.ComplexTypes;
 using Entities.Dtos;
 
 namespace Business.Abstract
@@ -20,6 +17,7 @@ namespace Business.Abstract
         Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByViewCountAsync(bool isAscending, int? takeSize);
         Task<IDataResult<ArticleListDto>> GetAllByPagingAsync(int? categoryId, int currentPage = 1, int pageSize = 5, bool isAscending = false);
+        Task<IDataResult<ArticleListDto>> GetAllByUserIdOnFilter(int userId, FilterBy filterBy, OrderBy orderBy, bool isAscending, int takeSize, int categoryId, DateTime startAt, DateTime endAt, int minViewCount, int maxViewCount, int minCommentCount, int maxCommentCount);
         Task<IDataResult<ArticleListDto>> SearchAsync(string keyword, int currentPage = 1, int pageSize = 5, bool isAscending = false);
         Task<IResult> IncreaseViewCountAsync(int articleId);
         Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId);
