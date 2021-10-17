@@ -1,14 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@using Entities.Concrete
+@using Microsoft.Extensions.Options
+@inject IOptions<WebsiteInfo> WebsiteInfo
+@{
+    var websiteInfo = WebsiteInfo.Value;
+
+}
+
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Programcılar ve Yazılımcılar İçin Türkçe Kaynak, Rehber ve İçerikler.">
-    <meta name="author" content="ProgrammersBlog">
+    <meta name="description" content="@websiteInfo.SeoDescription">
+    <meta name="author" content="@websiteInfo.SeoAuthor">
+    <meta name="keywords" content="@websiteInfo.SeoTags" />
 
-    <title>@ViewBag.Title | ProgrammersBlog</title>
+    <title>@ViewBag.Title | @websiteInfo.Title</title>
 
     <!-- Bootstrap core CSS -->
     <link href="~/BlogHome/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -24,7 +33,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Programmers Blog</a>
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">@websiteInfo.MenuTitle</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
