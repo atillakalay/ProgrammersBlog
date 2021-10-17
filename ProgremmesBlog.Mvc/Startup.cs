@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 using Business.AutoMapper.Profiles;
 using Business.Extensions;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using ProgrammersBlog.Mvc.AutoMapper.Profiles;
@@ -26,6 +27,7 @@ namespace ProgrammersBlog.Mvc
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
             services.AddControllersWithViews(options =>
             {
                 options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(value => "Bu alan boþ geçilmemelidir.");
