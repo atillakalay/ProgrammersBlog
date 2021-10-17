@@ -1,0 +1,63 @@
+﻿@model ProgrammersBlog.Mvc.Models.ArticleDetailRightSideBarViewModel
+<div class="col-md-4">
+
+    <div class="card my-4">
+        <img src="~/img/@Model.User.Picture" class="card-img-top text-center img-thumbnail mt-1 mb-1 " alt="@Model.User.UserName" />
+        <h5 class="card-header text-center">@Model.User.UserName</h5>
+        <div class="card-body">
+            <p class="card-text text-center">@Model.User.About</p>
+            <div class="card-footer text-center">
+                <p>Sosyal Medya Linkleri</p>
+                @if (Model.User.LinkedInLink != null)
+                {
+    <a href="@Model.User.LinkedInLink"><span class="fab fa-linkedin"></span></a>}
+                @if (Model.User.GitHubLink != null)
+                {
+    <a href="@Model.User.GitHubLink"><span class="fab fa-github-square"></span></a>}
+                @if (Model.User.FacebookLink != null)
+                {
+    <a href="@Model.User.FacebookLink"><span class="fab fa-facebook-square"></span></a>}
+                @if (Model.User.TwitterLink != null)
+                {
+    <a href="@Model.User.TwitterLink"><span class="fab fa-twitter-square"></span></a>}
+                @if (Model.User.InstagramLink != null)
+                {
+    <a href="@Model.User.InstagramLink"><span class="fab fa-instagram"></span></a>}
+                @if (Model.User.YoutubeLink != null)
+                {
+    <a href="@Model.User.YoutubeLink"><span class="fab fa-youtube-square"></span></a>}
+                @if (Model.User.WebsiteLink != null)
+                {
+    <a href="@Model.User.WebsiteLink"><span class="fab fa-home"></span></a>}
+            </div>
+        </div>
+    </div>
+
+    <!-- Side Widget -->
+    <div class="card my-4">
+        <h5 class="card-header">@Model.Header</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-group">
+                        @for (int i = 0; i < Model.ArticleListDto.Articles.Count; i++)
+                        {
+                            if (i % 2 == 0)
+                            {
+            <li class="list-group-item list-group-item-primary">
+                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@Model.ArticleListDto.Articles[i].Id">@Model.ArticleListDto.Articles[i].Title</a>
+            </li> }
+                            else
+                            {
+            <li class="list-group-item list-group-item-info">
+                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@Model.ArticleListDto.Articles[i].Id">@Model.ArticleListDto.Articles[i].Title</a>
+            </li>}
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
