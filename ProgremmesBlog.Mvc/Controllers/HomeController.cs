@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -27,9 +28,19 @@ namespace ProgrammersBlog.Mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> About()
+        public IActionResult About()
         {
             return View(_aboutUsPageInfo);
+        }
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Contact(EmailSendDto emailSendDto)
+        {
+            return View();
         }
     }
 }
