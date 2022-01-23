@@ -1,0 +1,33 @@
+﻿@using Entities.Concrete
+@using Microsoft.Extensions.Options
+@inject IOptions<WebsiteInfo> WebsiteInfo
+@{
+    var websiteInfo = WebsiteInfo.Value;
+}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">@websiteInfo.MenuTitle</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        Anasayfa
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="About">Hakkında</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Contact">İletişim</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Yönetim Paneli</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
