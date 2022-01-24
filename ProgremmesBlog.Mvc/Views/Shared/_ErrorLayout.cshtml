@@ -24,39 +24,27 @@
     <!-- Custom styles for this template -->
     <link href="~/BlogHome/css/blog-home.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" crossorigin="anonymous" />
-
+    <link href="~/BlogHome/css/error-page-bg-animation.css" rel="stylesheet">
 </head>
 
-<body>
-
-<partial name="_MainMenuPartial" />
-
-    <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-
-            <!-- Blog Entries Column -->
-            @RenderBody()
-
-            @await Component.InvokeAsync("RightSideBar")
-            <!-- /.row -->
-        </div>
+<body class="wrapper">
+<div id="layoutError">
+    <div id="layoutError_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+               @RenderBody()
+                </div>
+            </div>
+        </main>
     </div>
-    <!-- /.container -->
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Tüm Hakları Saklıdır & ProgrammersBlog @DateTime.Now.Year</p>
-        </div>
-        <!-- /.container -->
-    </footer>
+</div>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="~/BlogHome/vendor/jquery/jquery.min.js"></script>
-    <script src="~/BlogHome/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
-    @await RenderSectionAsync("Scripts", false)
+<!-- Bootstrap core JavaScript -->
+<script src="~/BlogHome/vendor/jquery/jquery.min.js"></script>
+<script src="~/BlogHome/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
+@await RenderSectionAsync("Scripts", false)
 </body>
 
 </html>

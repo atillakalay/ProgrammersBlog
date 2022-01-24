@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
@@ -30,6 +31,7 @@ namespace ProgrammersBlog.Mvc.Controllers
         [HttpGet]
         public IActionResult About()
         {
+            throw new Exception("Hata");
             return View(_aboutUsPageInfo);
         }
         [HttpGet]
