@@ -9,6 +9,10 @@
     <div class="text-center mt-4">
         <h1 class="display-1">500</h1>
         <p class="lead">@errorModel.Message</p>
+        @if (errorModel.Detail !=null)
+        {
+            <p class="lead">@errorModel.Detail</p>
+        }
         <a class="text-warning" asp-controller="Home" asp-action="Index">
             Anasayfa'ya dönmek için tıklayınız.
         </a>
