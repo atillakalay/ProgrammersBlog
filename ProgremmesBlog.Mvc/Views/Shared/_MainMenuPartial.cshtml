@@ -1,6 +1,6 @@
 ﻿@using Entities.Concrete
 @using Microsoft.Extensions.Options
-@inject IOptions<WebsiteInfo> WebsiteInfo
+@inject IOptionsSnapshot<WebsiteInfo> WebsiteInfo
 @{
     var websiteInfo = WebsiteInfo.Value;
 }
@@ -19,7 +19,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="About">Hakkında</a>
+                    <a class="nav-link" asp-controller="Home" asp-action="About">Hakkımızda</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Contact">İletişim</a>
