@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Entities.Concrete;
 using Entities.Dtos;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
 
@@ -10,6 +11,7 @@ namespace ProgrammersBlog.Mvc.AutoMapper.Profiles
         {
             CreateMap<ArticleAddViewModel, ArticleAddDto>();
             CreateMap<ArticleUpdateDto, ArticleUpdateViewModel>().ReverseMap();
+            CreateMap<ArticleRightSideBarWidgetOptions, ArticleRightSideBarWidgetOptionsViewModel>();
         }
     }
 }
