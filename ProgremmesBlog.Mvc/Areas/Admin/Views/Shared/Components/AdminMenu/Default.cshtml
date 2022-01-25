@@ -44,11 +44,15 @@
                 <div class="sb-sidenav-menu-heading">Ayarlar</div>
                 <a class="nav-link" asp-area="Admin" asp-controller="Options" asp-action="GeneralSettings">
                     <div class="sb-nav-link-icon"><i class="fas fa-tools"></i></div>
-                   Genel Ayarlar
+                    Genel Ayarlar
                 </a>
                 <a class="nav-link" asp-area="Admin" asp-controller="Options" asp-action="EmailSettings">
                     <div class="sb-nav-link-icon"><i class="fas fa-at"></i></div>
-                   E-Posta Ayarları
+                    E-Posta Ayarları
+                </a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Options" asp-action="ArticleRightSideBarWidgetSettings">
+                    <div class="sb-nav-link-icon"><i class="fas fa-newspaper"></i></div>
+                 Makale Sayfaları İçin Widget Ayarları
                 </a>
                 <a class="nav-link" asp-area="Admin" asp-controller="Options" asp-action="About">
                     <div class="sb-nav-link-icon"><i class="fas fa-address-card"></i></div>
@@ -63,7 +67,7 @@
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="DeletedCategories">Kategoriler</a>
-                        <a class="nav-link" asp-area="Admin" asp-controller="Article" asp-action="DeletedArticles" >Makaleler</a>
+                        <a class="nav-link" asp-area="Admin" asp-controller="Article" asp-action="DeletedArticles">Makaleler</a>
                         <a class="nav-link" asp-area="Admin" asp-controller="Comment" asp-action="DeletedComments">Yorumlar</a>
                     </nav>
                 </div>
