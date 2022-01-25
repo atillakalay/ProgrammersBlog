@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Business.Abstract;
+using Core.Utilities.Helpers.Abstract.WritableOptionsHelper;
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,14 @@ namespace ProgrammersBlog.Mvc.Controllers
         private readonly AboutUsPageInfo _aboutUsPageInfo;
         private readonly IMailService _mailService;
         private readonly IToastNotification _toastNotification;
+        private readonly IWritableOptions<AboutUsPageInfo> _aboutUsPageInfoWriter;
 
-        public HomeController(IArticleService articleService, IOptionsSnapshot<AboutUsPageInfo> aboutUsPageInfo, IMailService mailService, IToastNotification toastNotification)
+        public HomeController(IArticleService articleService, IOptionsSnapshot<AboutUsPageInfo> aboutUsPageInfo, IMailService mailService, IToastNotification toastNotification, IWritableOptions<AboutUsPageInfo> aboutUsPageInfoWriter)
         {
             _articleService = articleService;
             _mailService = mailService;
             _toastNotification = toastNotification;
+            _aboutUsPageInfoWriter = aboutUsPageInfoWriter;
             _aboutUsPageInfo = aboutUsPageInfo.Value;
 
         }
@@ -37,6 +40,7 @@ namespace ProgrammersBlog.Mvc.Controllers
         [HttpGet]
         public IActionResult About()
         {
+            //_aboutUsPageInfoWriter.Update(x=>x.Header="Selam Yenilendi");
             return View(_aboutUsPageInfo);
         }
         [HttpGet]
