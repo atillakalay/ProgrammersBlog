@@ -40,7 +40,7 @@ namespace ProgrammersBlog.Mvc.Controllers
         [HttpGet]
         public IActionResult About()
         {
-            //_aboutUsPageInfoWriter.Update(x=>x.Header="Selam Yenilendi");
+            //_aboutUsPageInfoWriter.Update(x=>x.Header="Yeni Başlık");
             return View(_aboutUsPageInfo);
         }
         [HttpGet]
