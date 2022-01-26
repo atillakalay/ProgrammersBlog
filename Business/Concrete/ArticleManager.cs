@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Business.Abstract;
 using Business.Utilities;
+using Core.Entities.Concrete;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.ComplexTypes;
 using Core.Utilities.Results.Concrete;
@@ -42,6 +43,34 @@ namespace Business.Concrete
                 });
             }
             return new DataResult<ArticleDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
+        }
+
+        public async Task<IDataResult<ArticleDto>> BetByIdAsync(int articleId, bool includeCategory, bool includeComments, bool includeUser)
+        {
+            List<Expression<Func<Article, bool>>> predicates = new List<Expression<Func<Article, bool>>>();
+            List<Expression<Func<Article, object>>> includes = new List<Expression<Func<Article, object>>>();
+            if (includeCategory) includes.Add(a => a.Category);
+            if (includeComments) includes.Add(a => a.Comments);
+            if (includeUser) includes.Add(a => a.User);
+            predicates.Add(a => a.Id == articleId);
+            var article=await UnitOfWork.Articles.GetAsyncV2(predicates,includes);
+            if (article==null)
+            {
+                return new DataResult<ArticleDto>(ResultStatus.Warning, message: Messages.General.ValidationError(),
+                    null, new List<ValidationError>
+                    {
+                        new ValidationError
+                        {
+                            PropertyName = "articleId",
+                            Message = Messages.Article.NotFoundById(articleId)
+                        }
+                    });
+            }
+
+            return new DataResult<ArticleDto>(ResultStatus.Success, new ArticleDto
+            {
+                Article = article
+            });
         }
 
         public async Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleId)

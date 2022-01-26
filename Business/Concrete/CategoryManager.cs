@@ -224,7 +224,7 @@ namespace Business.Concrete
                 await UnitOfWork.SaveAsync();
                 return new Result(ResultStatus.Success, Messages.Category.HardDelete(category.Name));
             }
-            return new Result(ResultStatus.Error, Messages.Category.NotFound(isPlural: false), null);
+            return new Result(ResultStatus.Error,message:Messages.Category.NotFound(false));
         }
 
         public async Task<IDataResult<int>> CountAsync()
