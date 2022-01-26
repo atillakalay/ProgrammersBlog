@@ -13,6 +13,11 @@
         
         public static class Category
         {
+            public static string NotFoundById(int categoryId)
+            {
+                return $"{categoryId} kategori koduna ait böyle bir kategori bulunamadı.";
+            }
+
             public static string NotFound(bool isPlural)
             {
                 if (isPlural) return "Hiç bir kategori bulunamadı.";
@@ -114,6 +119,42 @@
             {
                 return $"{createdByName} tarafından eklenen yorum başarıyla arşivden geri getirilmiştir.";
             }
+        }
+
+        public static class User
+        {
+            public static string NotFoundById(int userId)
+            {
+                return $"{userId} kullanıcı koduna ait böyle bir kullanıcı bulunamadı.";
+            }
+
+            //public static string NotFound(bool isPlural)
+            //{
+            //    if (isPlural) return "Hiç bir kategori bulunamadı.";
+            //    return "Böyle bir kategori bulunamadı.";
+            //}
+
+            //public static string Add(string categoryName)
+            //{
+            //    return $"{categoryName} adlı kategori başarıyla eklenmiştir.";
+            //}
+
+            //public static string Update(string categoryName)
+            //{
+            //    return $"{categoryName} adlı kategori başarıyla güncellenmiştir.";
+            //}
+            //public static string Delete(string categoryName)
+            //{
+            //    return $"{categoryName} adlı kategori başarıyla silinmiştir.";
+            //}
+            //public static string HardDelete(string categoryName)
+            //{
+            //    return $"{categoryName} adlı kategori başarıyla veritabanından silinmiştir.";
+            //}
+            //public static string UndoDelete(string categoryName)
+            //{
+            //    return $"{categoryName} adlı kategori başarıyla arşivden geri getirilmiştir.";
+            //}
         }
     }
 }
