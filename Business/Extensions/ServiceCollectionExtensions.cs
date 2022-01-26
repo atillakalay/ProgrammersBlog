@@ -15,7 +15,7 @@ namespace Business.Extensions
     {
         public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection, string connectionString)
         {
-            serviceCollection.AddDbContext<ProgrammersBlogContext>(options => options.UseSqlServer(connectionString));
+            serviceCollection.AddDbContext<ProgrammersBlogContext>(options => options.UseSqlServer(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution));
             serviceCollection.AddIdentity<User, Role>(options =>
             {
                 //User Password Options
