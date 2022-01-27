@@ -44,3 +44,7 @@ function getJsonNetObjectById(parentObj, id) {
     }
     return null;
 }
+function getTodaysDate() {
+    let today = new Date();
+    return `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+}
