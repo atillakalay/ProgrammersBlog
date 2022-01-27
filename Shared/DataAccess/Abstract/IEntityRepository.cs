@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -26,5 +27,7 @@ namespace Core.DataAccess.Abstract
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 
         Task<int> CountAsync(Expression<Func<T, bool>> predicate = null);
+
+        IQueryable<T> GetAsQueryable();
     }
 }

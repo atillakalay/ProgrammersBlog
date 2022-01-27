@@ -150,5 +150,10 @@ namespace Core.DataAccess.Concrete.EntityFramework
         {
             return await (predicate == null ? _context.Set<TEntity>().CountAsync() : _context.Set<TEntity>().CountAsync(predicate));
         }
+
+        public IQueryable<TEntity> GetAsQueryable()
+        {
+            return _context.Set<TEntity>().AsQueryable();
+        }
     }
 }
