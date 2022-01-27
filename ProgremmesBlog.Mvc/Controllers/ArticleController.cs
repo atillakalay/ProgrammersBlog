@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Core.Utilities.Results.ComplexTypes;
-using Entities.ComplexTypes;
 using Entities.Concrete;
 using Microsoft.Extensions.Options;
+using ProgrammersBlog.Mvc.Attributes;
 using ProgrammersBlog.Mvc.Models;
 
 namespace ProgrammersBlog.Mvc.Controllers
@@ -35,6 +35,7 @@ namespace ProgrammersBlog.Mvc.Controllers
         }
 
         [HttpGet]
+        [ViewCountFilter]
         public async Task<IActionResult> Detail(int articleId)
         {
             var articleResult = await _articleService.GetAsync(articleId);
@@ -43,7 +44,7 @@ namespace ProgrammersBlog.Mvc.Controllers
                 var userArticles = await _articleService.GetAllByUserIdOnFilter(articleResult.Data.Article.UserId,
                    _articleRightSideBarWidgetOptions.FilterBy, _articleRightSideBarWidgetOptions.OrderBy, _articleRightSideBarWidgetOptions.IsAscending, _articleRightSideBarWidgetOptions.TakeSize, _articleRightSideBarWidgetOptions.CategoryId, _articleRightSideBarWidgetOptions.StartAt,
                     _articleRightSideBarWidgetOptions.EndAt, _articleRightSideBarWidgetOptions.MinViewCount, _articleRightSideBarWidgetOptions.MaxViewCount, _articleRightSideBarWidgetOptions.MinCommentCount, _articleRightSideBarWidgetOptions.MaxCommentCount);
-                await _articleService.IncreaseViewCountAsync(articleId);
+                //await _articleService.IncreaseViewCountAsync(articleId);
                 return View(new ArticleDetailViewModel
                 {
                     ArticleDto = articleResult.Data,
