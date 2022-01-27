@@ -1,4 +1,5 @@
 ﻿@using System.Text.RegularExpressions
+@using ProgrammersBlog.Mvc.Extensions
 @model Entities.Dtos.ArticleListDto
 @{ ViewBag.Title = "Anasayfa";
     Layout = "_Layout";
@@ -39,7 +40,7 @@
                                     @{ article.Content = regex.Replace(article.Content, ""); }
                                     @(article.Content.Length>250 ? article.Content.Substring(0,250) : article.Content)
                                 </p>
-                                <a asp-controller="Article" asp-action="Detail" asp-route-articleId="@article.Id" class="btn btn-primary">Daha fazla oku &rarr;</a>
+                                <a href="/@Url.FriendlyUrlHelper(article.Title)/@article.Id" class="btn btn-primary">Daha fazla oku &rarr;</a>
                             </div>
                             <div class="card-footer text-muted">
                                 @article.User.UserName tarafından @article.Date tarihinde paylaşıldı.
