@@ -209,5 +209,17 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             var hardDeletedArticleResult = JsonSerializer.Serialize(result);
             return Json(hardDeletedArticleResult);
         }
+
+        [Authorize(Roles = "SuperAdmin,Article.Read")]
+        [HttpGet]
+        public async Task<JsonResult> GetAllByViewCount(bool isAscending,int takeSize)
+        {
+            var result = await _articleService.GetAllByViewCountAsync(isAscending,takeSize);
+            var articles = JsonSerializer.Serialize(result.Data.Articles, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(articles);
+        }
     }
 }
