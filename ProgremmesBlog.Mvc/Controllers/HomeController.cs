@@ -10,6 +10,7 @@ using NToastNotify;
 
 namespace ProgrammersBlog.Mvc.Controllers
 {
+    [Route("/")]
     public class HomeController : Controller
     {
         private readonly IArticleService _articleService;
@@ -28,6 +29,9 @@ namespace ProgrammersBlog.Mvc.Controllers
 
         }
 
+        [Route("index")]
+        [Route("anasayfa")]
+        [Route("")]
         [HttpGet]
         public async Task<IActionResult> Index(int? categoryId, int currentPage = 1, int pageSize = 5, bool isAscending = false)
         {
@@ -37,17 +41,26 @@ namespace ProgrammersBlog.Mvc.Controllers
             return View(articlesResult.Data);
         }
 
+        [Route("about")]
+        [Route("hakkimizda")]
+        [Route("hakkkinda")]
         [HttpGet]
         public IActionResult About()
         {
             //_aboutUsPageInfoWriter.Update(x=>x.Header="Yeni Başlık");
             return View(_aboutUsPageInfo);
         }
+
+        [Route("iletisim")]
+        [Route("contact")]
         [HttpGet]
         public IActionResult Contact()
         {
             return View();
         }
+
+        [Route("iletisim")]
+        [Route("contact")]
         [HttpPost]
         public IActionResult Contact(EmailSendDto emailSendDto)
         {
