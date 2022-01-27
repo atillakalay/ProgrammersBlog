@@ -28,43 +28,51 @@ namespace ProgrammersBlog.Mvc.Helpers.Concrete
             _wwwroot = _env.WebRootPath;
         }
 
-        public async Task<IDataResult<ImageUploadedDto>> Upload(string name, IFormFile pictureFile, PictureType pictureType, string folderName = null)
+        public string Upload(string name, IFormFile pictureFile, PictureType pictureType, string folderName = null)
         {
 
+            /* Eğer folderName değişkeni null gelir ise, o zaman resim tipine göre (PictureType) klasör adı ataması yapılır. */
             folderName ??= pictureType == PictureType.User ? userImagesFolder : postImagesFolder;
 
+            /* Eğer folderName değişkeni ile gelen klasör adı sistemimizde mevcut değilse, yeni bir klasör oluşturulur. */
             if (!Directory.Exists($"{_wwwroot}/{imgFolder}/{folderName}"))
             {
                 Directory.CreateDirectory($"{_wwwroot}/{imgFolder}/{folderName}");
             }
+
+            /* Resimin yüklenme sırasındaki ilk adı oldFileName adlı değişkene atanır. */
             string oldFileName = Path.GetFileNameWithoutExtension(pictureFile.FileName);
+
+            /* Resimin uzantısı fileExtension adlı değişkene atanır. */
             string fileExtension = Path.GetExtension(pictureFile.FileName);
 
 
             Regex regex = new Regex("[*'\",._&#^@]");
             name = regex.Replace(name, string.Empty);
 
+
             DateTime dateTime = DateTime.Now;
-            // AtillaKalay_587_5_38_12_3_10_2020.png
+            /*
+            // Parametre ile gelen değerler kullanılarak yeni bir resim adı oluşturulur.
+            // Örn: AlperTunga_587_5_38_12_3_10_2020.png
+            */
             string newFileName = $"{name}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
+
+            /* Kendi parametrelerimiz ile sistemimize uygun yeni bir dosya yolu (path) oluşturulur. */
             var path = Path.Combine($"{_wwwroot}/{imgFolder}/{folderName}", newFileName);
-            await using (var stream = new FileStream(path, FileMode.Create))
+
+            /* Sistemimiz için oluşturulan yeni dosya yoluna resim kopyalanır. */
+            using (var stream = new FileStream(path, FileMode.Create))
             {
-                await pictureFile.CopyToAsync(stream);
+                pictureFile.CopyTo(stream);
             }
 
-            string message = pictureType == PictureType.User
-                 ? $"{name} adlı kullanıcının resimi başarıyla yüklenmiştir."
+            /* Resim tipine göre kullanıcı için bir mesaj oluşturulur. */
+            string nameMessage = pictureType == PictureType.User
+                ? $"{name} adlı kullanıcının resimi başarıyla yüklenmiştir."
                 : $"{name} adlı makalenin resimi başarıyla yüklenmiştir.";
-            return new DataResult<ImageUploadedDto>(ResultStatus.Success, message, new ImageUploadedDto
-            {
-                FullName = $"{folderName}/{newFileName}",
-                OldName = oldFileName,
-                Extension = fileExtension,
-                FolderName = folderName,
-                Path = path,
-                Size = pictureFile.Length
-            });
+
+            return $"{folderName}/{newFileName}";
         }
 
         public IDataResult<ImageDeletedDto> Delete(string pictureName)
