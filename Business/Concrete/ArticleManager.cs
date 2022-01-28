@@ -181,7 +181,7 @@ namespace Business.Concrete
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync()
         {
             var articles = await UnitOfWork.Articles.GetAllAsync(a => !a.IsDeleted, ar => ar.User, ar => ar.Category);
-            throw new SqlNullValueException();
+            //throw new SqlNullValueException();
             if (articles.Count > -1)
             {
                 return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto

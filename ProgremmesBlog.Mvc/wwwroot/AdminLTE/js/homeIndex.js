@@ -43,9 +43,9 @@
         function (data) {
             const articleResult = jQuery.parseJSON(data);
 
-            let viewCountContext = $('#viewCountChart');
+            let viewsCountContext = $('#viewCountChart');
 
-            let viewCountChart = new Chart(viewCountContext,
+            let viewsCountChart = new Chart(viewsCountContext,
                 {
                     type: 'bar',
                     data: {
@@ -53,7 +53,7 @@
                         datasets: [
                             {
                                 label: 'Okunma Sayısı',
-                                data: articleResult.$values.map(article => article.ViewCount),
+                                data: articleResult.$values.map(article => article.ViewsCount),
                                 backgroundColor: '#fb3640',
                                 hoverBorderWidth: 4,
                                 hoverBorderColor: 'black'
