@@ -36,5 +36,5 @@ Merhaba, bu proje genel olarak katmanlı mimariye uygun bir şekilde tasarlanmı
 - Trumbowyg
 - Select2
 - Bootstrap 4.5 Tema Giydirme İşlemleri
-<img src="https://user-images.githubusercontent.com/63123956/151607171-3e71adfd-a42a-4f7b-9beb-88ff5b27590e.png" alt="logo" align="center">
+<center> <img src="https://user-images.githubusercontent.com/63123956/151607171-3e71adfd-a42a-4f7b-9beb-88ff5b27590e.png" alt="logo"></cener>
 
