@@ -37,5 +37,5 @@ Merhaba, bu proje genel olarak katmanlı mimariye uygun bir şekilde tasarlanmı
 - Select2
 - Bootstrap 4.5 Tema Giydirme İşlemleri
 
-<img align="center" src="https://user-images.githubusercontent.com/63123956/151607171-3e71adfd-a42a-4f7b-9beb-88ff5b27590e.png" alt="logo">
+<img align="center" src="https://user-images.githubusercontent.com/63123956/151607171-3e71adfd-a42a-4f7b-9beb-88ff5b27590e.png">
 
